@@ -1,4 +1,4 @@
--- Teratrium Hub Menu (полностью черный хедер и меню)
+-- Teratrium Hub Menu (полностью черный, объединенная надпись)
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local player = Players.LocalPlayer
@@ -73,7 +73,7 @@ toggleBtn.Parent = toggleContainer
 local mainFrame = Instance.new("Frame")
 mainFrame.Size = UDim2.new(0, 600, 0, 380)
 mainFrame.Position = UDim2.new(0.5, -300, 0.5, -190)
-mainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- ПОЛНОСТЬЮ ЧЕРНЫЙ
+mainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 mainFrame.BackgroundTransparency = 0
 mainFrame.BorderSizePixel = 1
 mainFrame.BorderColor3 = Color3.fromRGB(40, 40, 40)
@@ -85,12 +85,12 @@ mainFrame.Parent = screenGui
 local header = Instance.new("Frame")
 header.Size = UDim2.new(1, 0, 0, 30)
 header.Position = UDim2.new(0, 0, 0, 0)
-header.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- ПОЛНОСТЬЮ ЧЕРНЫЙ
-header.BackgroundTransparency = 0 -- УБРАЛ ПРОЗРАЧНОСТЬ
+header.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+header.BackgroundTransparency = 0
 header.BorderSizePixel = 0
 header.Parent = mainFrame
 
--- ЛОГОТИП (ЗАГРУЖЕННЫЙ)
+-- ЛОГОТИП
 if logoPath then
     local logo = Instance.new("ImageLabel")
     logo.Size = UDim2.new(0, 24, 0, 24)
@@ -103,7 +103,6 @@ if logoPath then
     lc.CornerRadius = UDim.new(0, 4)
     lc.Parent = logo
 else
-    -- Заглушка "T" если логотип не загрузился
     local iconFrame = Instance.new("Frame")
     iconFrame.Size = UDim2.new(0, 24, 0, 24)
     iconFrame.Position = UDim2.new(0, 4, 0.5, -12)
@@ -125,53 +124,21 @@ else
     iconText.Parent = iconFrame
 end
 
--- КОНТЕЙНЕР ДЛЯ НАЗВАНИЯ
-local titleContainer = Instance.new("Frame")
-titleContainer.Size = UDim2.new(0, 200, 1, 0)
-titleContainer.Position = UDim2.new(0, 34, 0, 0)
-titleContainer.BackgroundTransparency = 1
-titleContainer.Parent = header
-
--- Tetrarium (белый)
+-- НАЗВАНИЕ (ОДНА СТРОКА, БЕЗ ПРОБЕЛА ДО ТОЧКИ)
 local titleLabel = Instance.new("TextLabel")
-titleLabel.Size = UDim2.new(0, 95, 1, 0)
-titleLabel.Position = UDim2.new(0, 0, 0, 0)
+titleLabel.Size = UDim2.new(0, 200, 1, 0)
+titleLabel.Position = UDim2.new(0, 34, 0, 0)
 titleLabel.BackgroundTransparency = 1
-titleLabel.Text = "Tetrarium"
+titleLabel.RichText = true  -- Включаем поддержку разных цветов в одной строке
+titleLabel.Text = 'Tetrarium.hub'
 titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 titleLabel.TextSize = 14
 titleLabel.Font = Enum.Font.Gotham
 titleLabel.TextXAlignment = Enum.TextXAlignment.Left
 titleLabel.TextYAlignment = Enum.TextYAlignment.Center
-titleLabel.Parent = titleContainer
+titleLabel.Parent = header
 
--- . (точка) - РОЗОВАЯ
-local dotLabel = Instance.new("TextLabel")
-dotLabel.Size = UDim2.new(0, 10, 1, 0)
-dotLabel.Position = UDim2.new(0, 95, 0, 0)
-dotLabel.BackgroundTransparency = 1
-dotLabel.Text = "."
-dotLabel.TextColor3 = Color3.fromRGB(255, 50, 150)
-dotLabel.TextSize = 14
-dotLabel.Font = Enum.Font.Gotham
-dotLabel.TextXAlignment = Enum.TextXAlignment.Center
-dotLabel.TextYAlignment = Enum.TextYAlignment.Center
-dotLabel.Parent = titleContainer
-
--- hub (РОЗОВЫЙ)
-local hubLabel = Instance.new("TextLabel")
-hubLabel.Size = UDim2.new(0, 40, 1, 0)
-hubLabel.Position = UDim2.new(0, 105, 0, 0)
-hubLabel.BackgroundTransparency = 1
-hubLabel.Text = "hub"
-hubLabel.TextColor3 = Color3.fromRGB(255, 50, 150)
-hubLabel.TextSize = 14
-hubLabel.Font = Enum.Font.Gotham
-hubLabel.TextXAlignment = Enum.TextXAlignment.Left
-hubLabel.TextYAlignment = Enum.TextYAlignment.Center
-hubLabel.Parent = titleContainer
-
--- РАЗДЕЛИТЕЛЬНАЯ ПОЛОСКА (РОЗОВАЯ, 1px)
+-- РАЗДЕЛИТЕЛЬНАЯ ПОЛОСКА
 local separator = Instance.new("Frame")
 separator.Size = UDim2.new(1, 0, 0, 1)
 separator.Position = UDim2.new(0, 0, 1, 0)
