@@ -1,4 +1,4 @@
--- Teratrium Hub Menu (с загрузкой иконки для VIS)
+-- Teratrium Hub Menu (с загрузкой иконок для VIS и COM)
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
@@ -41,38 +41,69 @@ elseif getgenv().getcustomasset then
 end
 
 -- ============================================================
---  ЗАГРУЗКА ИКОНКИ ДЛЯ VIS (НОВОЕ)
+--  ЗАГРУЗКА ИКОНКИ ДЛЯ VIS
 -- ============================================================
-local iconUrl = "https://i.ibb.co/mr3sFCgr/12786.png"
-local iconFileName = "vis_icon.png"
-local iconFilePath = iconFileName
+local visIconUrl = "https://i.ibb.co/mr3sFCgr/12786.png"
+local visIconFileName = "vis_icon.png"
+local visIconFilePath = visIconFileName
 
-if not fileExists(iconFilePath) then
+if not fileExists(visIconFilePath) then
     print("📥 Скачиваем иконку для VIS...")
-    local success, content = pcall(function() return game:HttpGet(iconUrl, true) end)
+    local success, content = pcall(function() return game:HttpGet(visIconUrl, true) end)
     if success and content then
-        local writeSuccess, err = pcall(function() writefile(iconFilePath, content) end)
+        local writeSuccess, err = pcall(function() writefile(visIconFilePath, content) end)
         if writeSuccess then
-            print("✅ Иконка сохранена: " .. iconFilePath)
+            print("✅ Иконка VIS сохранена: " .. visIconFilePath)
         else
-            warn("⚠️ Не удалось сохранить иконку: " .. tostring(err))
+            warn("⚠️ Не удалось сохранить иконку VIS: " .. tostring(err))
         end
     else
-        warn("⚠️ Не удалось скачать иконку")
+        warn("⚠️ Не удалось скачать иконку VIS")
     end
 else
-    print("✅ Иконка уже есть на диске.")
+    print("✅ Иконка VIS уже есть на диске.")
 end
 
-local iconPath = nil
+local visIconPath = nil
 if getcustomasset then
-    iconPath = getcustomasset(iconFilePath)
+    visIconPath = getcustomasset(visIconFilePath)
 elseif getgenv().getcustomasset then
-    iconPath = getgenv().getcustomasset(iconFilePath)
+    visIconPath = getgenv().getcustomasset(visIconFilePath)
 end
 
 -- ============================================================
---  GUI
+--  ЗАГРУЗКА ИКОНКИ ДЛЯ COM (по твоей ссылке)
+-- ============================================================
+local comIconUrl = "https://i.ibb.co/WvKshzS7/crosshair-2.jpg"
+local comIconFileName = "com_icon.jpg"
+local comIconFilePath = comIconFileName
+
+if not fileExists(comIconFilePath) then
+    print("📥 Скачиваем иконку для COM...")
+    local success, content = pcall(function() return game:HttpGet(comIconUrl, true) end)
+    if success and content then
+        local writeSuccess, err = pcall(function() writefile(comIconFilePath, content) end)
+        if writeSuccess then
+            print("✅ Иконка COM сохранена: " .. comIconFilePath)
+        else
+            warn("⚠️ Не удалось сохранить иконку COM: " .. tostring(err))
+        end
+    else
+        warn("⚠️ Не удалось скачать иконку COM")
+    end
+else
+    print("✅ Иконка COM уже есть на диске.")
+end
+
+local comIconPath = nil
+if getcustomasset then
+    comIconPath = getcustomasset(comIconFilePath)
+elseif getgenv().getcustomasset then
+    comIconPath = getgenv().getcustomasset(comIconFilePath)
+end
+
+-- ============================================================
+--  GUI (остальной код без изменений)
 -- ============================================================
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "TeratriumHub"
@@ -86,7 +117,6 @@ toggleContainer.Position = UDim2.new(0.02, 0, 0.05, 0)
 toggleContainer.BackgroundTransparency = 1
 toggleContainer.Parent = screenGui
 
--- Toggle-кнопка
 local toggleBtn = Instance.new("TextButton")
 toggleBtn.Size = UDim2.new(1, 0, 1, 0)
 toggleBtn.Position = UDim2.new(0, 0, 0, 0)
@@ -101,7 +131,7 @@ toggleBtn.Font = Enum.Font.SourceSans
 toggleBtn.TextWrapped = true
 toggleBtn.Parent = toggleContainer
 
--- ОСНОВНОЕ МЕНЮ (ЧЕРНОЕ)
+-- ОСНОВНОЕ МЕНЮ
 local mainFrame = Instance.new("Frame")
 mainFrame.Size = UDim2.new(0, 600, 0, 380)
 mainFrame.Position = UDim2.new(0.5, -300, 0.5, -190)
@@ -113,7 +143,7 @@ mainFrame.ClipsDescendants = true
 mainFrame.Visible = false
 mainFrame.Parent = screenGui
 
--- ХЕДЕР (ЧЕРНЫЙ)
+-- ХЕДЕР
 local header = Instance.new("Frame")
 header.Size = UDim2.new(1, 0, 0, 30)
 header.Position = UDim2.new(0, 0, 0, 0)
@@ -135,7 +165,6 @@ if logoPath then
     lc.CornerRadius = UDim.new(0, 4)
     lc.Parent = logo
 else
-    -- Заглушка
     local iconFrame = Instance.new("Frame")
     iconFrame.Size = UDim2.new(0, 24, 0, 24)
     iconFrame.Position = UDim2.new(0, 4, 0.5, -12)
@@ -181,7 +210,7 @@ separator.BorderSizePixel = 0
 separator.Parent = header
 
 -- ============================================================
---  ВКЛАДКИ
+--  ВКЛАДКИ (с иконками для VIS и COM)
 -- ============================================================
 local tabsContainer = Instance.new("Frame")
 tabsContainer.Size = UDim2.new(0, 60, 0, 200)
@@ -193,7 +222,6 @@ local tabNames = {"VIS", "COM", "MISC"}
 local tabButtons = {}
 local tabContents = {}
 
--- Функция анимации вкладки
 local function animateTab(btn, isActive)
     local targetSize = isActive and UDim2.new(0, 50, 0, 50) or UDim2.new(0, 44, 0, 44)
     local targetColor = isActive and Color3.fromRGB(40, 40, 45) or Color3.fromRGB(20, 20, 25)
@@ -205,7 +233,6 @@ local function animateTab(btn, isActive)
     TweenService:Create(btn, tweenInfo, {BorderColor3 = targetBorder}):Play()
 end
 
--- Создание вкладок
 for i, name in ipairs(tabNames) do
     local btn = Instance.new("TextButton")
     btn.Size = UDim2.new(0, 44, 0, 44)
@@ -221,24 +248,28 @@ for i, name in ipairs(tabNames) do
     btnCorner.CornerRadius = UDim.new(0, 6)
     btnCorner.Parent = btn
     
-    -- ВСТАВЛЯЕМ ИКОНКУ В ПЕРВУЮ ВКЛАДКУ (VIS)
-    if name == "VIS" and iconPath then
+    -- ВСТАВЛЯЕМ ИКОНКИ (каждая загружается отдельно)
+    if name == "VIS" and visIconPath then
         local icon = Instance.new("ImageLabel")
         icon.Size = UDim2.new(0, 28, 0, 28)
         icon.Position = UDim2.new(0.5, -14, 0.5, -14)
         icon.BackgroundTransparency = 1
-        icon.Image = iconPath  -- Используем загруженный файл
+        icon.Image = visIconPath
         icon.ScaleType = Enum.ScaleType.Fit
         icon.Parent = btn
-    elseif name == "VIS" and not iconPath then
-        -- Если иконка не загрузилась — ставим заглушку
-        btn.Text = "VIS"
+    elseif name == "COM" and comIconPath then
+        local icon = Instance.new("ImageLabel")
+        icon.Size = UDim2.new(0, 28, 0, 28)
+        icon.Position = UDim2.new(0.5, -14, 0.5, -14)
+        icon.BackgroundTransparency = 1
+        icon.Image = comIconPath
+        icon.ScaleType = Enum.ScaleType.Fit
+        icon.Parent = btn
     else
-        -- Для других вкладок оставляем текст
-        btn.Text = name
+        btn.Text = name  -- Если иконка не загрузилась — показываем текст
     end
     
-    -- Контент для вкладки
+    -- Контент для вкладки (без изменений)
     local content = Instance.new("Frame")
     content.Size = UDim2.new(1, -80, 1, -55)
     content.Position = UDim2.new(0, 75, 0, 45)
@@ -253,7 +284,6 @@ for i, name in ipairs(tabNames) do
     contentCorner.CornerRadius = UDim.new(0, 6)
     contentCorner.Parent = content
     
-    -- Подпись в контенте
     local contentLabel = Instance.new("TextLabel")
     contentLabel.Size = UDim2.new(1, 0, 1, 0)
     contentLabel.BackgroundTransparency = 1
@@ -268,7 +298,6 @@ for i, name in ipairs(tabNames) do
     tabButtons[name] = btn
     tabContents[name] = content
     
-    -- Обработчик нажатия
     btn.MouseButton1Click:Connect(function()
         for n, b in pairs(tabButtons) do
             animateTab(b, n == name)
@@ -277,7 +306,6 @@ for i, name in ipairs(tabNames) do
     end)
 end
 
--- Активируем первую вкладку
 animateTab(tabButtons["VIS"], true)
 
 -- ПЕРЕТАСКИВАНИЕ TOGGLE
@@ -305,7 +333,6 @@ toggleContainer.InputEnded:Connect(function(input)
     end
 end)
 
--- Toggle открыть/закрыть
 local menuVisible = false
 toggleBtn.MouseButton1Click:Connect(function()
     menuVisible = not menuVisible
@@ -313,7 +340,6 @@ toggleBtn.MouseButton1Click:Connect(function()
     print("Меню: " .. tostring(menuVisible))
 end)
 
--- Перетаскивание меню
 local dragging = false
 local dragStart, startPos
 
