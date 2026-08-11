@@ -1,4 +1,4 @@
--- Teratrium Hub Menu (слегка скругленные углы)
+-- Teratrium Hub Menu (с названием Teratrium.Hub)
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
@@ -74,7 +74,7 @@ end
 -- ============================================================
 --  ЗАГРУЗКА ИКОНКИ ДЛЯ COM
 -- ============================================================
-local comIconUrl = "https://i.ibb.co/Tx5kr9rK/12837.png"
+local comIconUrl = "https://i.ibb.co/WvKshzS7/crosshair-2.jpg"
 local comIconFileName = "com_icon.jpg"
 local comIconFilePath = comIconFileName
 
@@ -131,7 +131,6 @@ toggleBtn.Font = Enum.Font.SourceSans
 toggleBtn.TextWrapped = true
 toggleBtn.Parent = toggleContainer
 
--- СКРУГЛЕНИЕ ДЛЯ TOGGLE (чуть-чуть)
 local toggleCorner = Instance.new("UICorner")
 toggleCorner.CornerRadius = UDim.new(0, 4)
 toggleCorner.Parent = toggleBtn
@@ -148,7 +147,6 @@ mainFrame.ClipsDescendants = true
 mainFrame.Visible = false
 mainFrame.Parent = screenGui
 
--- СКРУГЛЕНИЕ ДЛЯ МЕНЮ (радиус 4)
 local mainCorner = Instance.new("UICorner")
 mainCorner.CornerRadius = UDim.new(0, 4)
 mainCorner.Parent = mainFrame
@@ -200,13 +198,12 @@ else
     iconText.Parent = iconFrame
 end
 
--- НАЗВАНИЕ
+-- НАЗВАНИЕ (ПРОСТО Teratrium.Hub)
 local titleLabel = Instance.new("TextLabel")
 titleLabel.Size = UDim2.new(0, 200, 1, 0)
 titleLabel.Position = UDim2.new(0, 34, 0, 0)
 titleLabel.BackgroundTransparency = 1
-titleLabel.RichText = true
-titleLabel.Text = 'Teratrium.hub'
+titleLabel.Text = "Teratrium.Hub"  -- ПРОСТО ТЕКСТ
 titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 titleLabel.TextSize = 14
 titleLabel.Font = Enum.Font.Gotham
@@ -258,12 +255,10 @@ for i, name in ipairs(tabNames) do
     btn.Text = ""
     btn.Parent = tabsContainer
     
-    -- СКРУГЛЕНИЕ ДЛЯ КАЖДОЙ ВКЛАДКИ (радиус 4)
     local btnCorner = Instance.new("UICorner")
     btnCorner.CornerRadius = UDim.new(0, 4)
     btnCorner.Parent = btn
     
-    -- ВСТАВЛЯЕМ ИКОНКИ
     if name == "VIS" and visIconPath then
         local icon = Instance.new("ImageLabel")
         icon.Size = UDim2.new(0, 28, 0, 28)
@@ -284,7 +279,6 @@ for i, name in ipairs(tabNames) do
         btn.Text = name
     end
     
-    -- Контент для вкладки
     local content = Instance.new("Frame")
     content.Size = UDim2.new(1, -80, 1, -55)
     content.Position = UDim2.new(0, 75, 0, 45)
@@ -295,7 +289,6 @@ for i, name in ipairs(tabNames) do
     content.Visible = (i == 1)
     content.Parent = mainFrame
     
-    -- СКРУГЛЕНИЕ ДЛЯ КОНТЕНТА (радиус 4)
     local contentCorner = Instance.new("UICorner")
     contentCorner.CornerRadius = UDim.new(0, 4)
     contentCorner.Parent = content
