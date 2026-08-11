@@ -1,145 +1,150 @@
+-- Teratrium Hub Menu
 local Players = game:GetService("Players")
-local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
 
 local player = Players.LocalPlayer
-local playerGui = player:WaitForChild("PlayerGui")
+local mouse = player:GetMouse()
 
--- Функция для безопасного выполнения кода
-local function safeExecute(func)
-    local success, err = pcall(func)
-    if not success then
-        warn("Ошибка: " .. tostring(err))
+-- Создаем GUI
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "TeratriumHub"
+screenGui.Parent = player:WaitForChild("PlayerGui")
+screenGui.ResetOnSpawn = false
+
+-- Основное окно (скрыто до анимации)
+local mainFrame = Instance.new("Frame")
+mainFrame.Size = UDim2.new(0, 640, 0, 470)
+mainFrame.Position = UDim2.new(0.5, -320, 0.5, -235)
+mainFrame.BackgroundColor3 = Color3.fromRGB(20, 25, 45) -- темно-синий
+mainFrame.BackgroundTransparency = 1
+mainFrame.BorderSizePixel = 1
+mainFrame.BorderColor3 = Color3.fromRGB(120, 120, 120)
+mainFrame.ClipsDescendants = true
+mainFrame.Parent = screenGui
+
+-- Хедер (серая полоска)
+local header = Instance.new("Frame")
+header.Size = UDim2.new(1, 0, 0, 35)
+header.Position = UDim2.new(0, 0, 0, 0)
+header.BackgroundColor3 = Color3.fromRGB(60, 60, 70)
+header.BorderSizePixel = 0
+header.Parent = mainFrame
+
+-- Логотип в хедере
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Size = UDim2.new(1, 0, 1, 0)
+titleLabel.Position = UDim2.new(0, 0, 0, 0)
+titleLabel.BackgroundTransparency = 1
+titleLabel.Text = "Terarium Hub"
+titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+titleLabel.TextScaled = true
+titleLabel.Font = Enum.Font.GothamBold
+titleLabel.TextStrokeTransparency = 0
+titleLabel.TextWrapped = true
+titleLabel.Parent = header
+
+-- Подсветка "Hub" розовым (используем RichText)
+titleLabel.RichText = true
+titleLabel.Text = '<font color="white">Terarium</font><font color="#ff6b9d"> Hub</font>'
+
+-- Кнопка закрытия
+local closeBtn = Instance.new("TextButton")
+closeBtn.Size = UDim2.new(0, 25, 0, 25)
+closeBtn.Position = UDim2.new(1, -30, 0, 5)
+closeBtn.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+closeBtn.BackgroundTransparency = 0.5
+closeBtn.BorderSizePixel = 0
+closeBtn.Text = "✕"
+closeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+closeBtn.TextSize = 14
+closeBtn.Font = Enum.Font.GothamBold
+closeBtn.Parent = header
+
+closeBtn.MouseButton1Click:Connect(function()
+    mainFrame:TweenSize(UDim2.new(0, 0, 0, 0), "Out", "Quad", 0.3, true)
+    wait(0.3)
+    mainFrame.Visible = false
+end)
+
+-- Текст "hello, by sxripter" (появляется по середине)
+local helloLabel = Instance.new("TextLabel")
+helloLabel.Size = UDim2.new(1, 0, 1, 0)
+helloLabel.Position = UDim2.new(0, 0, 0, 0)
+helloLabel.BackgroundTransparency = 1
+helloLabel.Text = "hello, by sxripter"
+helloLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+helloLabel.TextSize = 30
+helloLabel.Font = Enum.Font.GothamBold
+helloLabel.TextStrokeTransparency = 0.5
+helloLabel.TextWrapped = true
+helloLabel.ZIndex = 10
+helloLabel.Parent = mainFrame
+
+-- Анимация приветствия
+helloLabel.TextTransparency = 1
+local fadeInHello = TweenService:Create(helloLabel, TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+    TextTransparency = 0
+})
+fadeInHello:Play()
+
+-- После приветствия плавно появляется меню
+wait(1.5)
+
+-- Исчезновение hello
+local fadeOutHello = TweenService:Create(helloLabel, TweenInfo.new(0.8, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
+    TextTransparency = 1
+})
+fadeOutHello:Play()
+
+-- Появление меню
+wait(0.3)
+local showMenu = TweenService:Create(mainFrame, TweenInfo.new(0.8, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+    BackgroundTransparency = 0
+})
+showMenu:Play()
+
+-- Также плавно уменьшаем прозрачность всех элементов внутри
+for _, child in pairs(mainFrame:GetChildren()) do
+    if child:IsA("Frame") or child:IsA("TextLabel") or child:IsA("TextButton") then
+        if child ~= helloLabel then
+            local tween = TweenService:Create(child, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+                BackgroundTransparency = (child.BackgroundTransparency or 0)
+            })
+            tween:Play()
+        end
     end
-    return success
 end
 
-safeExecute(function()
-    -- Создаём ScreenGui для загрузки
-    local screenGui = Instance.new("ScreenGui")
-    screenGui.Name = "MenuGui"
-    screenGui.ResetOnSpawn = false
-    screenGui.Parent = playerGui
+-- Перетаскивание меню
+local dragging = false
+local dragInput, dragStart, startPos
 
-    -- ЭКРАН ЗАГРУЗКИ
-    local loadingLabel = Instance.new("TextLabel")
-    loadingLabel.Name = "LoadingLabel"
-    loadingLabel.Size = UDim2.new(1, 0, 1, 0)
-    loadingLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- Чёрный фон
-    loadingLabel.BackgroundTransparency = 0.3
-    loadingLabel.TextColor3 = Color3.fromRGB(255, 255, 255) -- Белый текст
-    loadingLabel.TextSize = 72
-    loadingLabel.Font = Enum.Font.GothamBold
-    loadingLabel.Text = "Teratrium"
-    loadingLabel.TextTransparency = 1 -- Изначально невидимо
-    loadingLabel.Parent = screenGui
-
-    -- Анимация появления текста (fade in)
-    local tweenInfo = TweenInfo.new(
-        2, -- Длительность 2 секунды
-        Enum.EasingStyle.Quad,
-        Enum.EasingDirection.InOut
-    )
-    local tween = TweenService:Create(loadingLabel, tweenInfo, {TextTransparency = 0})
-    tween:Play()
-
-    -- Ждём завершения анимации появления
-    tween.Completed:Connect(function()
-        wait(1) -- Держим текст видимым 1 секунду
-
-        -- Анимация исчезновения текста (fade out)
-        local tweenOut = TweenService:Create(loadingLabel, tweenInfo, {TextTransparency = 1})
-        tweenOut:Play()
-
-        tweenOut.Completed:Connect(function()
-            loadingLabel:Destroy() -- Удаляем экран загрузки
-
-            -- СОЗДАНИЕ ОСНОВНОГО МЕНЮ
-            local menu = Instance.new("Frame")
-            menu.Name = "Menu"
-            menu.Size = UDim2.new(0, 670, 0, 420)
-            menu.Position = UDim2.new(0.5, -335, 0.5, -210)
-            menu.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-            menu.BorderColor3 = Color3.fromRGB(200, 200, 200)
-            menu.BorderSizePixel = 1
-            menu.BackgroundTransparency = 1 -- Невидимо перед анимацией
-            menu.Parent = screenGui
-
-            -- Скругленные углы меню
-            local corner = Instance.new("UICorner")
-            corner.CornerRadius = UDim.new(0, 15)
-            corner.Parent = menu
-
-            -- ХЕДЕР
-            local header = Instance.new("Frame")
-            header.Name = "Header"
-            header.Size = UDim2.new(1, 0, 0, 60)
-            header.Position = UDim2.new(0, 0, 0, 0)
-            header.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-            header.BorderSizePixel = 0
-            header.Parent = menu
-
-            local headerCorner = Instance.new("UICorner")
-            headerCorner.CornerRadius = UDim.new(0, 15)
-            headerCorner.Parent = header
-
-            -- Название в хедере
-            local title = Instance.new("TextLabel")
-            title.Name = "Title"
-            title.Size = UDim2.new(1, -20, 1, 0)
-            title.Position = UDim2.new(0, 10, 0, 0)
-            title.BackgroundTransparency = 1
-            title.TextColor3 = Color3.fromRGB(255, 255, 255)
-            title.TextSize = 28
-            title.Font = Enum.Font.GothamBold
-            title.Text = "Teratrium Hack"
-            title.TextXAlignment = Enum.TextXAlignment.Left
-            title.Parent = header
-
-            -- Кнопка закрытия
-            local closeButton = Instance.new("TextButton")
-            closeButton.Name = "CloseButton"
-            closeButton.Size = UDim2.new(0, 50, 0, 50)
-            closeButton.Position = UDim2.new(1, -55, 0, 5)
-            closeButton.BackgroundColor3 = Color3.fromRGB(220, 50, 50)
-            closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-            closeButton.TextSize = 24
-            closeButton.Font = Enum.Font.GothamBold
-            closeButton.Text = "✕"
-            closeButton.BorderSizePixel = 0
-            closeButton.Parent = header
-
-            local closeCorner = Instance.new("UICorner")
-            closeCorner.CornerRadius = UDim.new(0, 8)
-            closeCorner.Parent = closeButton
-
-            -- Функционал кнопки закрытия
-            safeExecute(function()
-                closeButton.MouseButton1Click:Connect(function()
-                    screenGui:Destroy()
-                end)
-            end)
-
-            -- Эффект при наведении
-            safeExecute(function()
-                closeButton.MouseEnter:Connect(function()
-                    closeButton.BackgroundColor3 = Color3.fromRGB(250, 80, 80)
-                end)
-
-                closeButton.MouseLeave:Connect(function()
-                    closeButton.BackgroundColor3 = Color3.fromRGB(220, 50, 50)
-                end)
-            end)
-
-            -- Анимация появления меню (fade in)
-            local menuTween = TweenService:Create(
-                menu,
-                TweenInfo.new(0.8, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-                {BackgroundTransparency = 0}
-            )
-            menuTween:Play()
-
-            print("Меню Teratrium Hack создано!")
+header.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        dragStart = input.Position
+        startPos = mainFrame.Position
+        
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
         end)
-    end)
+    end
 end)
+
+header.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement then
+        dragInput = input
+    end
+end)
+
+game:GetService("UserInputService").InputChanged:Connect(function(input)
+    if input == dragInput and dragging then
+        local delta = input.Position - dragStart
+        mainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+end)
+
+print("✅ Teratrium Hub загружен!")
