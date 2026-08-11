@@ -72,7 +72,7 @@ elseif getgenv().getcustomasset then
 end
 
 -- ============================================================
---  ЗАГРУЗКА ИКОНКИ ДЛЯ COM (по твоей ссылке)
+--  ЗАГРУЗКА ИКОНКИ ДЛЯ COM (НОВАЯ)
 -- ============================================================
 local comIconUrl = "https://i.ibb.co/WvKshzS7/crosshair-2.jpg"
 local comIconFileName = "com_icon.jpg"
@@ -248,7 +248,7 @@ for i, name in ipairs(tabNames) do
     btnCorner.CornerRadius = UDim.new(0, 6)
     btnCorner.Parent = btn
     
-    -- ВСТАВЛЯЕМ ИКОНКИ (каждая загружается отдельно)
+    -- ВСТАВЛЯЕМ ИКОНКИ
     if name == "VIS" and visIconPath then
         local icon = Instance.new("ImageLabel")
         icon.Size = UDim2.new(0, 28, 0, 28)
