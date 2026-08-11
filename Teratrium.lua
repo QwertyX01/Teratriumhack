@@ -1,4 +1,4 @@
--- Teratrium Hub Menu (с иконкой вместо VIS)
+-- Teratrium Hub Menu (с загрузкой иконки для VIS)
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
@@ -7,22 +7,22 @@ local player = Players.LocalPlayer
 -- ============================================================
 --  ЗАГРУЗКА ЛОГОТИПА
 -- ============================================================
-local imageUrl = "https://i.ibb.co/nNMK31JC/Chat-GPT-Image-11-2026-15-15-20.png"
-local fileName = "teratrium_logo.png"
-local filePath = fileName
+local logoUrl = "https://i.ibb.co/nNMK31JC/Chat-GPT-Image-11-2026-15-15-20.png"
+local logoFileName = "teratrium_logo.png"
+local logoFilePath = logoFileName
 
 local function fileExists(path)
     local success, result = pcall(function() return loadfile(path) end)
     return success and result ~= nil
 end
 
-if not fileExists(filePath) then
+if not fileExists(logoFilePath) then
     print("📥 Скачиваем логотип Teratrium...")
-    local success, content = pcall(function() return game:HttpGet(imageUrl, true) end)
+    local success, content = pcall(function() return game:HttpGet(logoUrl, true) end)
     if success and content then
-        local writeSuccess, err = pcall(function() writefile(filePath, content) end)
+        local writeSuccess, err = pcall(function() writefile(logoFilePath, content) end)
         if writeSuccess then
-            print("✅ Логотип сохранён: " .. filePath)
+            print("✅ Логотип сохранён: " .. logoFilePath)
         else
             warn("⚠️ Не удалось сохранить файл: " .. tostring(err))
         end
@@ -35,9 +35,40 @@ end
 
 local logoPath = nil
 if getcustomasset then
-    logoPath = getcustomasset(filePath)
+    logoPath = getcustomasset(logoFilePath)
 elseif getgenv().getcustomasset then
-    logoPath = getgenv().getcustomasset(filePath)
+    logoPath = getgenv().getcustomasset(logoFilePath)
+end
+
+-- ============================================================
+--  ЗАГРУЗКА ИКОНКИ ДЛЯ VIS (НОВОЕ)
+-- ============================================================
+local iconUrl = "https://i.ibb.co/mr3sFCgr/12786.png"
+local iconFileName = "vis_icon.png"
+local iconFilePath = iconFileName
+
+if not fileExists(iconFilePath) then
+    print("📥 Скачиваем иконку для VIS...")
+    local success, content = pcall(function() return game:HttpGet(iconUrl, true) end)
+    if success and content then
+        local writeSuccess, err = pcall(function() writefile(iconFilePath, content) end)
+        if writeSuccess then
+            print("✅ Иконка сохранена: " .. iconFilePath)
+        else
+            warn("⚠️ Не удалось сохранить иконку: " .. tostring(err))
+        end
+    else
+        warn("⚠️ Не удалось скачать иконку")
+    end
+else
+    print("✅ Иконка уже есть на диске.")
+end
+
+local iconPath = nil
+if getcustomasset then
+    iconPath = getcustomasset(iconFilePath)
+elseif getgenv().getcustomasset then
+    iconPath = getgenv().getcustomasset(iconFilePath)
 end
 
 -- ============================================================
@@ -104,6 +135,7 @@ if logoPath then
     lc.CornerRadius = UDim.new(0, 4)
     lc.Parent = logo
 else
+    -- Заглушка
     local iconFrame = Instance.new("Frame")
     iconFrame.Size = UDim2.new(0, 24, 0, 24)
     iconFrame.Position = UDim2.new(0, 4, 0.5, -12)
@@ -182,22 +214,25 @@ for i, name in ipairs(tabNames) do
     btn.BackgroundTransparency = 0
     btn.BorderSizePixel = 1
     btn.BorderColor3 = Color3.fromRGB(80, 80, 80)
-    btn.Text = "" -- Убираем текст
+    btn.Text = ""
     btn.Parent = tabsContainer
     
     local btnCorner = Instance.new("UICorner")
     btnCorner.CornerRadius = UDim.new(0, 6)
     btnCorner.Parent = btn
     
-    -- ВСТАВЛЯЕМ ИКОНКУ В ПЕРВУЮ ВКЛАДКУ (ВМЕСТО VIS)
-    if name == "VIS" then
+    -- ВСТАВЛЯЕМ ИКОНКУ В ПЕРВУЮ ВКЛАДКУ (VIS)
+    if name == "VIS" and iconPath then
         local icon = Instance.new("ImageLabel")
         icon.Size = UDim2.new(0, 28, 0, 28)
         icon.Position = UDim2.new(0.5, -14, 0.5, -14)
         icon.BackgroundTransparency = 1
-        icon.Image = "https://i.ibb.co/mr3sFCgr/12786.png" -- ТВОЯ ССЫЛКА
+        icon.Image = iconPath  -- Используем загруженный файл
         icon.ScaleType = Enum.ScaleType.Fit
         icon.Parent = btn
+    elseif name == "VIS" and not iconPath then
+        -- Если иконка не загрузилась — ставим заглушку
+        btn.Text = "VIS"
     else
         -- Для других вкладок оставляем текст
         btn.Text = name
