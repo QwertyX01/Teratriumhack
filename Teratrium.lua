@@ -31,22 +31,36 @@ header.BackgroundColor3 = Color3.fromRGB(60, 60, 70)
 header.BorderSizePixel = 0
 header.Parent = mainFrame
 
--- Логотип в хедере
-local titleLabel = Instance.new("TextLabel")
-titleLabel.Size = UDim2.new(1, 0, 1, 0)
-titleLabel.Position = UDim2.new(0, 0, 0, 0)
-titleLabel.BackgroundTransparency = 1
-titleLabel.Text = "Terarium Hub"
-titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-titleLabel.TextScaled = true
-titleLabel.Font = Enum.Font.GothamBold
-titleLabel.TextStrokeTransparency = 0
-titleLabel.TextWrapped = true
-titleLabel.Parent = header
+-- Логотип в хедере (БЕЗ RICHTEXT - два отдельных TextLabel)
+local titleContainer = Instance.new("Frame")
+titleContainer.Size = UDim2.new(0.5, 0, 1, 0)
+titleContainer.Position = UDim2.new(0.25, 0, 0, 0)
+titleContainer.BackgroundTransparency = 1
+titleContainer.Parent = header
 
--- Подсветка "Hub" розовым (используем RichText)
-titleLabel.RichText = true
-titleLabel.Text = '<font color="white">Terarium</font><font color="#ff6b9d"> Hub</font>'
+-- Terarium (белый)
+local part1 = Instance.new("TextLabel")
+part1.Size = UDim2.new(0.65, 0, 1, 0)
+part1.Position = UDim2.new(0, 0, 0, 0)
+part1.BackgroundTransparency = 1
+part1.Text = "Terarium"
+part1.TextColor3 = Color3.fromRGB(255, 255, 255)
+part1.TextScaled = true
+part1.Font = Enum.Font.GothamBold
+part1.TextWrapped = true
+part1.Parent = titleContainer
+
+-- Hub (розовый)
+local part2 = Instance.new("TextLabel")
+part2.Size = UDim2.new(0.35, 0, 1, 0)
+part2.Position = UDim2.new(0.65, 0, 0, 0)
+part2.BackgroundTransparency = 1
+part2.Text = "Hub"
+part2.TextColor3 = Color3.fromRGB(255, 107, 157) -- #ff6b9d
+part2.TextScaled = true
+part2.Font = Enum.Font.GothamBold
+part2.TextWrapped = true
+part2.Parent = titleContainer
 
 -- Кнопка закрытия
 local closeBtn = Instance.new("TextButton")
@@ -103,18 +117,6 @@ local showMenu = TweenService:Create(mainFrame, TweenInfo.new(0.8, Enum.EasingSt
     BackgroundTransparency = 0
 })
 showMenu:Play()
-
--- Также плавно уменьшаем прозрачность всех элементов внутри
-for _, child in pairs(mainFrame:GetChildren()) do
-    if child:IsA("Frame") or child:IsA("TextLabel") or child:IsA("TextButton") then
-        if child ~= helloLabel then
-            local tween = TweenService:Create(child, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-                BackgroundTransparency = (child.BackgroundTransparency or 0)
-            })
-            tween:Play()
-        end
-    end
-end
 
 -- Перетаскивание меню
 local dragging = false
