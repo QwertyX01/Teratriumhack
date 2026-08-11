@@ -1,4 +1,4 @@
--- Teratrium Hub Menu (с вкладками VIS, COM, MISC)
+-- Teratrium Hub Menu (с иконкой вместо VIS)
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
@@ -149,7 +149,7 @@ separator.BorderSizePixel = 0
 separator.Parent = header
 
 -- ============================================================
---  ВКЛАДКИ (квадратные, слева)
+--  ВКЛАДКИ
 -- ============================================================
 local tabsContainer = Instance.new("Frame")
 tabsContainer.Size = UDim2.new(0, 60, 0, 200)
@@ -182,16 +182,26 @@ for i, name in ipairs(tabNames) do
     btn.BackgroundTransparency = 0
     btn.BorderSizePixel = 1
     btn.BorderColor3 = Color3.fromRGB(80, 80, 80)
-    btn.Text = name
-    btn.TextColor3 = Color3.fromRGB(200, 200, 200)
-    btn.TextSize = 12
-    btn.Font = Enum.Font.GothamBold
-    btn.TextWrapped = true
+    btn.Text = "" -- Убираем текст
     btn.Parent = tabsContainer
     
     local btnCorner = Instance.new("UICorner")
     btnCorner.CornerRadius = UDim.new(0, 6)
     btnCorner.Parent = btn
+    
+    -- ВСТАВЛЯЕМ ИКОНКУ В ПЕРВУЮ ВКЛАДКУ (ВМЕСТО VIS)
+    if name == "VIS" then
+        local icon = Instance.new("ImageLabel")
+        icon.Size = UDim2.new(0, 28, 0, 28)
+        icon.Position = UDim2.new(0.5, -14, 0.5, -14)
+        icon.BackgroundTransparency = 1
+        icon.Image = "https://i.ibb.co/mr3sFCgr/12786.png" -- ТВОЯ ССЫЛКА
+        icon.ScaleType = Enum.ScaleType.Fit
+        icon.Parent = btn
+    else
+        -- Для других вкладок оставляем текст
+        btn.Text = name
+    end
     
     -- Контент для вкладки
     local content = Instance.new("Frame")
