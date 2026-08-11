@@ -1,72 +1,90 @@
--- Teratrium Hub Menu (с Toggle-кнопкой)
+-- Teratrium Hub Menu (как на скриншоте)
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
-local TweenService = game:GetService("TweenService")
 local player = Players.LocalPlayer
 
--- Создаем GUI
+-- GUI
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "TeratriumHub"
 screenGui.Parent = player:WaitForChild("PlayerGui")
 screenGui.ResetOnSpawn = false
 
--- Toggle-кнопка (маленькая, темная, с белой обводкой)
+-- Toggle-кнопка
 local toggleBtn = Instance.new("TextButton")
 toggleBtn.Size = UDim2.new(0, 60, 0, 25)
 toggleBtn.Position = UDim2.new(0.02, 0, 0.05, 0)
-toggleBtn.BackgroundColor3 = Color3.fromRGB(30, 30, 40) -- темный
+toggleBtn.BackgroundColor3 = Color3.fromRGB(30, 30, 40)
 toggleBtn.BackgroundTransparency = 0
 toggleBtn.BorderSizePixel = 1
-toggleBtn.BorderColor3 = Color3.fromRGB(255, 255, 255) -- белая обводка
+toggleBtn.BorderColor3 = Color3.fromRGB(255, 255, 255)
 toggleBtn.Text = "Toggle"
 toggleBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 toggleBtn.TextSize = 12
-toggleBtn.Font = Enum.Font.SourceSans -- НЕ ЖИРНЫЙ
+toggleBtn.Font = Enum.Font.SourceSans
 toggleBtn.TextWrapped = true
 toggleBtn.Parent = screenGui
 
--- Основное окно (СКРЫТО по умолчанию)
+-- ОСНОВНОЕ МЕНЮ (как на скриншоте)
 local mainFrame = Instance.new("Frame")
-mainFrame.Size = UDim2.new(0, 640, 0, 470)
-mainFrame.Position = UDim2.new(0.5, -320, 0.5, -235)
-mainFrame.BackgroundColor3 = Color3.fromRGB(20, 22, 40) -- ТЕМНЫЙ, НО НЕ ПОЛНОСТЬЮ (#141628)
-mainFrame.BackgroundTransparency = 0 -- БЕЗ ПРОЗРАЧНОСТИ
-mainFrame.BorderSizePixel = 1
-mainFrame.BorderColor3 = Color3.fromRGB(120, 120, 120)
+mainFrame.Size = UDim2.new(0, 520, 0, 400) -- пропорции как на скрине
+mainFrame.Position = UDim2.new(0.5, -260, 0.5, -200)
+mainFrame.BackgroundColor3 = Color3.fromRGB(18, 18, 22) -- ТЕМНО-СЕРЫЙ/ЧЕРНЫЙ как на скрине
+mainFrame.BackgroundTransparency = 0
+mainFrame.BorderSizePixel = 0
 mainFrame.ClipsDescendants = true
-mainFrame.Visible = false -- Скрыто
+mainFrame.Visible = false
 mainFrame.Parent = screenGui
 
--- Хедер (СЕРАЯ ПОЛОСКА)
+-- СКРУГЛЕНИЕ УГЛОВ (радиус 8px как на скрине)
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 8)
+corner.Parent = mainFrame
+
+-- ХЕДЕР (фиолетово-розовая полоска как на скрине)
 local header = Instance.new("Frame")
 header.Size = UDim2.new(1, 0, 0, 30)
 header.Position = UDim2.new(0, 0, 0, 0)
-header.BackgroundColor3 = Color3.fromRGB(169, 169, 169)
-header.BackgroundTransparency = 0.2
+header.BackgroundColor3 = Color3.fromRGB(180, 50, 255) -- ФИОЛЕТОВО-РОЗОВЫЙ (#b432ff)
+header.BackgroundTransparency = 0
 header.BorderSizePixel = 0
 header.Parent = mainFrame
 
--- Teratrium в правом углу
+-- Название "Teratrium" в хедере (как на скрине)
 local titleLabel = Instance.new("TextLabel")
-titleLabel.Size = UDim2.new(0, 120, 0, 20)
-titleLabel.Position = UDim2.new(1, -130, 0.5, -10)
+titleLabel.Size = UDim2.new(0.5, 0, 1, 0)
+titleLabel.Position = UDim2.new(0.5, -90, 0, 0)
 titleLabel.BackgroundTransparency = 1
 titleLabel.Text = "Teratrium"
 titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-titleLabel.TextSize = 14
-titleLabel.Font = Enum.Font.SourceSans
-titleLabel.TextXAlignment = Enum.TextXAlignment.Right
+titleLabel.TextSize = 16
+titleLabel.Font = Enum.Font.GothamBold
+titleLabel.TextXAlignment = Enum.TextXAlignment.Center
 titleLabel.Parent = header
 
--- Toggle (открыть/закрыть меню)
-local menuVisible = false
+-- СКРУГЛЕНИЕ ДЛЯ ХЕДЕРА (только верхние углы)
+local headerCorner = Instance.new("UICorner")
+headerCorner.CornerRadius = UDim.new(0, 8)
+headerCorner.Parent = header
 
+-- Отрезаем нижние углы у хедера (чтобы не скруглялись внизу)
+local headerClip = Instance.new("Frame")
+headerClip.Size = UDim2.new(1, 0, 0.5, 0)
+headerClip.Position = UDim2.new(0, 0, 0.5, 0)
+headerClip.BackgroundTransparency = 1
+headerClip.ClipsDescendants = true
+headerClip.Parent = header
+
+-- Перемещаем titleLabel внутрь clip
+titleLabel.Parent = headerClip
+
+-- Toggle открыть/закрыть
+local menuVisible = false
 toggleBtn.MouseButton1Click:Connect(function()
     menuVisible = not menuVisible
     mainFrame.Visible = menuVisible
 end)
 
--- Перетаскивание Toggle-кнопки пальцем
+-- Перетаскивание Toggle-кнопки
 local draggingToggle = false
 local dragToggleStart, toggleStartPos
 
@@ -95,7 +113,7 @@ UserInputService.InputBegan:Connect(onToggleInputBegan)
 UserInputService.InputChanged:Connect(onToggleInputChanged)
 UserInputService.InputEnded:Connect(onToggleInputEnded)
 
--- Перетаскивание самого меню (только за хедер)
+-- Перетаскивание меню (только за хедер)
 local dragging = false
 local dragStart, startPos
 
