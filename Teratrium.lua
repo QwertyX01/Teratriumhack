@@ -1,4 +1,4 @@
--- Teratrium Hub Menu (с загрузкой иконок для VIS и COM)
+-- Teratrium Hub Menu (слегка скругленные углы)
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
@@ -72,7 +72,7 @@ elseif getgenv().getcustomasset then
 end
 
 -- ============================================================
---  ЗАГРУЗКА ИКОНКИ ДЛЯ COM (НОВАЯ)
+--  ЗАГРУЗКА ИКОНКИ ДЛЯ COM
 -- ============================================================
 local comIconUrl = "https://i.ibb.co/WvKshzS7/crosshair-2.jpg"
 local comIconFileName = "com_icon.jpg"
@@ -103,7 +103,7 @@ elseif getgenv().getcustomasset then
 end
 
 -- ============================================================
---  GUI (остальной код без изменений)
+--  GUI
 -- ============================================================
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "TeratriumHub"
@@ -131,6 +131,11 @@ toggleBtn.Font = Enum.Font.SourceSans
 toggleBtn.TextWrapped = true
 toggleBtn.Parent = toggleContainer
 
+-- СКРУГЛЕНИЕ ДЛЯ TOGGLE (чуть-чуть)
+local toggleCorner = Instance.new("UICorner")
+toggleCorner.CornerRadius = UDim.new(0, 4)
+toggleCorner.Parent = toggleBtn
+
 -- ОСНОВНОЕ МЕНЮ
 local mainFrame = Instance.new("Frame")
 mainFrame.Size = UDim2.new(0, 600, 0, 380)
@@ -142,6 +147,11 @@ mainFrame.BorderColor3 = Color3.fromRGB(40, 40, 40)
 mainFrame.ClipsDescendants = true
 mainFrame.Visible = false
 mainFrame.Parent = screenGui
+
+-- СКРУГЛЕНИЕ ДЛЯ МЕНЮ (радиус 4)
+local mainCorner = Instance.new("UICorner")
+mainCorner.CornerRadius = UDim.new(0, 4)
+mainCorner.Parent = mainFrame
 
 -- ХЕДЕР
 local header = Instance.new("Frame")
@@ -173,6 +183,10 @@ else
     iconFrame.BorderSizePixel = 1
     iconFrame.BorderColor3 = Color3.fromRGB(255, 50, 150)
     iconFrame.Parent = header
+    
+    local iconCorner = Instance.new("UICorner")
+    iconCorner.CornerRadius = UDim.new(0, 4)
+    iconCorner.Parent = iconFrame
 
     local iconText = Instance.new("TextLabel")
     iconText.Size = UDim2.new(1, 0, 1, 0)
@@ -210,7 +224,7 @@ separator.BorderSizePixel = 0
 separator.Parent = header
 
 -- ============================================================
---  ВКЛАДКИ (с иконками для VIS и COM)
+--  ВКЛАДКИ
 -- ============================================================
 local tabsContainer = Instance.new("Frame")
 tabsContainer.Size = UDim2.new(0, 60, 0, 200)
@@ -244,8 +258,9 @@ for i, name in ipairs(tabNames) do
     btn.Text = ""
     btn.Parent = tabsContainer
     
+    -- СКРУГЛЕНИЕ ДЛЯ КАЖДОЙ ВКЛАДКИ (радиус 4)
     local btnCorner = Instance.new("UICorner")
-    btnCorner.CornerRadius = UDim.new(0, 6)
+    btnCorner.CornerRadius = UDim.new(0, 4)
     btnCorner.Parent = btn
     
     -- ВСТАВЛЯЕМ ИКОНКИ
@@ -266,10 +281,10 @@ for i, name in ipairs(tabNames) do
         icon.ScaleType = Enum.ScaleType.Fit
         icon.Parent = btn
     else
-        btn.Text = name  -- Если иконка не загрузилась — показываем текст
+        btn.Text = name
     end
     
-    -- Контент для вкладки (без изменений)
+    -- Контент для вкладки
     local content = Instance.new("Frame")
     content.Size = UDim2.new(1, -80, 1, -55)
     content.Position = UDim2.new(0, 75, 0, 45)
@@ -280,8 +295,9 @@ for i, name in ipairs(tabNames) do
     content.Visible = (i == 1)
     content.Parent = mainFrame
     
+    -- СКРУГЛЕНИЕ ДЛЯ КОНТЕНТА (радиус 4)
     local contentCorner = Instance.new("UICorner")
-    contentCorner.CornerRadius = UDim.new(0, 6)
+    contentCorner.CornerRadius = UDim.new(0, 4)
     contentCorner.Parent = content
     
     local contentLabel = Instance.new("TextLabel")
