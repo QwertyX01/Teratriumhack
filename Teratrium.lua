@@ -1,4 +1,4 @@
--- Teratrium Hub Menu (с Hub)
+-- Teratrium Hub Menu (с иконкой в хедере)
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local player = Players.LocalPlayer
@@ -43,7 +43,7 @@ mainFrame.ClipsDescendants = true
 mainFrame.Visible = false
 mainFrame.Parent = screenGui
 
--- ХЕДЕР (ПРОЗРАЧНЫЙ)
+-- ХЕДЕР
 local header = Instance.new("Frame")
 header.Size = UDim2.new(1, 0, 0, 30)
 header.Position = UDim2.new(0, 0, 0, 0)
@@ -52,19 +52,29 @@ header.BackgroundTransparency = 1
 header.BorderSizePixel = 0
 header.Parent = mainFrame
 
--- КОНТЕЙНЕР ДЛЯ НАЗВАНИЯ (чтобы разместить Teratrium и Hub в одну строку)
+-- ИКОНКА (уменьшена до размеров хедера)
+local iconImage = Instance.new("ImageLabel")
+iconImage.Size = UDim2.new(0, 30, 0, 30) -- размер иконки 30x30 (под хедер 30px)
+iconImage.Position = UDim2.new(0, 4, 0, 0) -- слева с отступом 4px
+iconImage.BackgroundTransparency = 1
+iconImage.Image = "https://i.ibb.co/nNMK31JC/Chat-GPT-Image-11-2026-15-15-20.png"
+iconImage.ImageTransparency = 0
+iconImage.ScaleType = Enum.ScaleType.Fit
+iconImage.Parent = header
+
+-- КОНТЕЙНЕР ДЛЯ НАЗВАНИЯ (со сдвигом вправо, чтобы не перекрывать иконку)
 local titleContainer = Instance.new("Frame")
 titleContainer.Size = UDim2.new(0, 200, 1, 0)
-titleContainer.Position = UDim2.new(0, 8, 0, 0)
+titleContainer.Position = UDim2.new(0, 38, 0, 0) -- сдвиг вправо, чтобы текст не налезал на иконку
 titleContainer.BackgroundTransparency = 1
 titleContainer.Parent = header
 
--- Teratrium (белый)
+-- Tetrarium (белый)
 local titleLabel = Instance.new("TextLabel")
-titleLabel.Size = UDim2.new(0, 90, 1, 0)
+titleLabel.Size = UDim2.new(0, 95, 1, 0)
 titleLabel.Position = UDim2.new(0, 0, 0, 0)
 titleLabel.BackgroundTransparency = 1
-titleLabel.Text = "Teratrium"
+titleLabel.Text = "Tetrarium"
 titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 titleLabel.TextSize = 14
 titleLabel.Font = Enum.Font.Gotham
@@ -72,20 +82,33 @@ titleLabel.TextXAlignment = Enum.TextXAlignment.Left
 titleLabel.TextYAlignment = Enum.TextYAlignment.Center
 titleLabel.Parent = titleContainer
 
--- Hub (РОЗОВЫЙ, такой же размер и шрифт)
+-- . (точка) - РОЗОВАЯ
+local dotLabel = Instance.new("TextLabel")
+dotLabel.Size = UDim2.new(0, 10, 1, 0)
+dotLabel.Position = UDim2.new(0, 95, 0, 0)
+dotLabel.BackgroundTransparency = 1
+dotLabel.Text = "."
+dotLabel.TextColor3 = Color3.fromRGB(255, 50, 150)
+dotLabel.TextSize = 14
+dotLabel.Font = Enum.Font.Gotham
+dotLabel.TextXAlignment = Enum.TextXAlignment.Center
+dotLabel.TextYAlignment = Enum.TextYAlignment.Center
+dotLabel.Parent = titleContainer
+
+-- hub (РОЗОВЫЙ)
 local hubLabel = Instance.new("TextLabel")
 hubLabel.Size = UDim2.new(0, 40, 1, 0)
-hubLabel.Position = UDim2.new(0, 92, 0, 0) -- Сразу после Teratrium с небольшим отступом
+hubLabel.Position = UDim2.new(0, 105, 0, 0)
 hubLabel.BackgroundTransparency = 1
-hubLabel.Text = "Hub"
-hubLabel.TextColor3 = Color3.fromRGB(255, 50, 150) -- ТАКОЙ ЖЕ РОЗОВЫЙ, КАК РАЗДЕЛИТЕЛЬ
-hubLabel.TextSize = 14 -- ТАКОЙ ЖЕ РАЗМЕР
-hubLabel.Font = Enum.Font.Gotham -- ТАКОЙ ЖЕ ШРИФТ
+hubLabel.Text = "hub"
+hubLabel.TextColor3 = Color3.fromRGB(255, 50, 150)
+hubLabel.TextSize = 14
+hubLabel.Font = Enum.Font.Gotham
 hubLabel.TextXAlignment = Enum.TextXAlignment.Left
 hubLabel.TextYAlignment = Enum.TextYAlignment.Center
 hubLabel.Parent = titleContainer
 
--- РАЗДЕЛИТЕЛЬНАЯ ПОЛОСКА (РОЗОВАЯ, 1px)
+-- РАЗДЕЛИТЕЛЬНАЯ ПОЛОСКА
 local separator = Instance.new("Frame")
 separator.Size = UDim2.new(1, 0, 0, 1)
 separator.Position = UDim2.new(0, 0, 1, 0)
