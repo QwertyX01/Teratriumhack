@@ -1,4 +1,4 @@
--- Teratrium Hub Menu (как на скриншоте)
+-- Teratrium Hub Menu (исправленный дизайн)
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local player = Players.LocalPlayer
@@ -24,49 +24,59 @@ toggleBtn.Font = Enum.Font.SourceSans
 toggleBtn.TextWrapped = true
 toggleBtn.Parent = screenGui
 
--- ОСНОВНОЕ МЕНЮ (как на скриншоте)
+-- ОСНОВНОЕ МЕНЮ (вытянутое по горизонтали)
 local mainFrame = Instance.new("Frame")
-mainFrame.Size = UDim2.new(0, 520, 0, 400) -- пропорции как на скрине
-mainFrame.Position = UDim2.new(0.5, -260, 0.5, -200)
-mainFrame.BackgroundColor3 = Color3.fromRGB(18, 18, 22) -- ТЕМНО-СЕРЫЙ/ЧЕРНЫЙ как на скрине
+mainFrame.Size = UDim2.new(0, 600, 0, 380) -- шире, чем высота
+mainFrame.Position = UDim2.new(0.5, -300, 0.5, -190)
+mainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20) -- темно-серый
 mainFrame.BackgroundTransparency = 0
 mainFrame.BorderSizePixel = 0
 mainFrame.ClipsDescendants = true
 mainFrame.Visible = false
 mainFrame.Parent = screenGui
 
--- СКРУГЛЕНИЕ УГЛОВ (радиус 8px как на скрине)
+-- СКРУГЛЕНИЕ УГЛОВ (8px)
 local corner = Instance.new("UICorner")
 corner.CornerRadius = UDim.new(0, 8)
 corner.Parent = mainFrame
 
--- ХЕДЕР (фиолетово-розовая полоска как на скрине)
+-- ХЕДЕР (ПРОЗРАЧНЫЙ!)
 local header = Instance.new("Frame")
-header.Size = UDim2.new(1, 0, 0, 30)
+header.Size = UDim2.new(1, 0, 0, 35)
 header.Position = UDim2.new(0, 0, 0, 0)
-header.BackgroundColor3 = Color3.fromRGB(180, 50, 255) -- ФИОЛЕТОВО-РОЗОВЫЙ (#b432ff)
-header.BackgroundTransparency = 0
+header.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+header.BackgroundTransparency = 1 -- ПОЛНОСТЬЮ ПРОЗРАЧНЫЙ
 header.BorderSizePixel = 0
 header.Parent = mainFrame
 
--- Название "Teratrium" в хедере (как на скрине)
+-- Название "Teratrium" (СЛЕВА, НЕ ПО ЦЕНТРУ!)
 local titleLabel = Instance.new("TextLabel")
-titleLabel.Size = UDim2.new(0.5, 0, 1, 0)
-titleLabel.Position = UDim2.new(0.5, -90, 0, 0)
+titleLabel.Size = UDim2.new(0, 150, 1, 0)
+titleLabel.Position = UDim2.new(0, 10, 0, 0) -- прижат к левому краю
 titleLabel.BackgroundTransparency = 1
 titleLabel.Text = "Teratrium"
 titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-titleLabel.TextSize = 16
-titleLabel.Font = Enum.Font.GothamBold
-titleLabel.TextXAlignment = Enum.TextXAlignment.Center
+titleLabel.TextSize = 18
+titleLabel.Font = Enum.Font.Gotham
+titleLabel.TextXAlignment = Enum.TextXAlignment.Left
+titleLabel.TextYAlignment = Enum.TextYAlignment.Center
 titleLabel.Parent = header
 
--- СКРУГЛЕНИЕ ДЛЯ ХЕДЕРА (только верхние углы)
+-- РАЗДЕЛИТЕЛЬНАЯ ПОЛОСКА (фиолетовая, 2px, внизу хедера)
+local separator = Instance.new("Frame")
+separator.Size = UDim2.new(1, 0, 0, 2)
+separator.Position = UDim2.new(0, 0, 1, 0) -- прижат к низу
+separator.BackgroundColor3 = Color3.fromRGB(180, 0, 255) -- НЕОНОВЫЙ ФИОЛЕТОВЫЙ
+separator.BackgroundTransparency = 0
+separator.BorderSizePixel = 0
+separator.Parent = header
+
+-- СКРУГЛЕНИЕ ТОЛЬКО ДЛЯ ВЕРХНИХ УГЛОВ (чтобы полоска не выходила)
 local headerCorner = Instance.new("UICorner")
 headerCorner.CornerRadius = UDim.new(0, 8)
 headerCorner.Parent = header
 
--- Отрезаем нижние углы у хедера (чтобы не скруглялись внизу)
+-- ОТРЕЗАЕМ НИЖНИЕ УГЛЫ У ХЕДЕРА
 local headerClip = Instance.new("Frame")
 headerClip.Size = UDim2.new(1, 0, 0.5, 0)
 headerClip.Position = UDim2.new(0, 0, 0.5, 0)
@@ -74,8 +84,9 @@ headerClip.BackgroundTransparency = 1
 headerClip.ClipsDescendants = true
 headerClip.Parent = header
 
--- Перемещаем titleLabel внутрь clip
+-- Перемещаем titleLabel и separator внутрь clip
 titleLabel.Parent = headerClip
+separator.Parent = headerClip
 
 -- Toggle открыть/закрыть
 local menuVisible = false
