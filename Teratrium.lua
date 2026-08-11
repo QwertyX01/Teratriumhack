@@ -206,7 +206,7 @@ titleLabel.Size = UDim2.new(0, 200, 1, 0)
 titleLabel.Position = UDim2.new(0, 34, 0, 0)
 titleLabel.BackgroundTransparency = 1
 titleLabel.RichText = true
-titleLabel.Text = '<font color="white">Tetrarium</font><font color="#ff3296">.</font><font color="#ff3296">hub</font>'
+titleLabel.Text = 'Teratrium.hub'
 titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 titleLabel.TextSize = 14
 titleLabel.Font = Enum.Font.Gotham
