@@ -1,4 +1,4 @@
--- Teratrium Hub Menu (исправленный дизайн)
+-- Teratrium Hub Menu (исправленный)
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local player = Players.LocalPlayer
@@ -24,105 +24,82 @@ toggleBtn.Font = Enum.Font.SourceSans
 toggleBtn.TextWrapped = true
 toggleBtn.Parent = screenGui
 
--- ОСНОВНОЕ МЕНЮ (вытянутое по горизонтали)
+-- ОСНОВНОЕ МЕНЮ (БЕЗ СКРУГЛЕНИЙ)
 local mainFrame = Instance.new("Frame")
-mainFrame.Size = UDim2.new(0, 600, 0, 380) -- шире, чем высота
+mainFrame.Size = UDim2.new(0, 600, 0, 380)
 mainFrame.Position = UDim2.new(0.5, -300, 0.5, -190)
-mainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20) -- темно-серый
+mainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 mainFrame.BackgroundTransparency = 0
-mainFrame.BorderSizePixel = 0
+mainFrame.BorderSizePixel = 1
+mainFrame.BorderColor3 = Color3.fromRGB(40, 40, 40)
 mainFrame.ClipsDescendants = true
 mainFrame.Visible = false
 mainFrame.Parent = screenGui
 
--- СКРУГЛЕНИЕ УГЛОВ (8px)
-local corner = Instance.new("UICorner")
-corner.CornerRadius = UDim.new(0, 8)
-corner.Parent = mainFrame
-
--- ХЕДЕР (ПРОЗРАЧНЫЙ!)
+-- ХЕДЕР (ПРОЗРАЧНЫЙ)
 local header = Instance.new("Frame")
-header.Size = UDim2.new(1, 0, 0, 35)
+header.Size = UDim2.new(1, 0, 0, 30)
 header.Position = UDim2.new(0, 0, 0, 0)
 header.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-header.BackgroundTransparency = 1 -- ПОЛНОСТЬЮ ПРОЗРАЧНЫЙ
+header.BackgroundTransparency = 1
 header.BorderSizePixel = 0
 header.Parent = mainFrame
 
--- Название "Teratrium" (СЛЕВА, НЕ ПО ЦЕНТРУ!)
+-- Название "Teratrium" (МАЛЕНЬКОЕ, СЛЕВА)
 local titleLabel = Instance.new("TextLabel")
-titleLabel.Size = UDim2.new(0, 150, 1, 0)
-titleLabel.Position = UDim2.new(0, 10, 0, 0) -- прижат к левому краю
+titleLabel.Size = UDim2.new(0, 120, 1, 0)
+titleLabel.Position = UDim2.new(0, 8, 0, 0)
 titleLabel.BackgroundTransparency = 1
 titleLabel.Text = "Teratrium"
 titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-titleLabel.TextSize = 18
+titleLabel.TextSize = 14
 titleLabel.Font = Enum.Font.Gotham
 titleLabel.TextXAlignment = Enum.TextXAlignment.Left
 titleLabel.TextYAlignment = Enum.TextYAlignment.Center
 titleLabel.Parent = header
 
--- РАЗДЕЛИТЕЛЬНАЯ ПОЛОСКА (фиолетовая, 2px, внизу хедера)
+-- РАЗДЕЛИТЕЛЬНАЯ ПОЛОСКА (РОЗОВАЯ, ТОНКАЯ, 1px)
 local separator = Instance.new("Frame")
-separator.Size = UDim2.new(1, 0, 0, 2)
-separator.Position = UDim2.new(0, 0, 1, 0) -- прижат к низу
-separator.BackgroundColor3 = Color3.fromRGB(180, 0, 255) -- НЕОНОВЫЙ ФИОЛЕТОВЫЙ
+separator.Size = UDim2.new(1, 0, 0, 1)
+separator.Position = UDim2.new(0, 0, 1, 0)
+separator.BackgroundColor3 = Color3.fromRGB(255, 50, 150) -- РОЗОВАЯ
 separator.BackgroundTransparency = 0
 separator.BorderSizePixel = 0
 separator.Parent = header
 
--- СКРУГЛЕНИЕ ТОЛЬКО ДЛЯ ВЕРХНИХ УГЛОВ (чтобы полоска не выходила)
-local headerCorner = Instance.new("UICorner")
-headerCorner.CornerRadius = UDim.new(0, 8)
-headerCorner.Parent = header
-
--- ОТРЕЗАЕМ НИЖНИЕ УГЛЫ У ХЕДЕРА
-local headerClip = Instance.new("Frame")
-headerClip.Size = UDim2.new(1, 0, 0.5, 0)
-headerClip.Position = UDim2.new(0, 0, 0.5, 0)
-headerClip.BackgroundTransparency = 1
-headerClip.ClipsDescendants = true
-headerClip.Parent = header
-
--- Перемещаем titleLabel и separator внутрь clip
-titleLabel.Parent = headerClip
-separator.Parent = headerClip
-
--- Toggle открыть/закрыть
-local menuVisible = false
-toggleBtn.MouseButton1Click:Connect(function()
-    menuVisible = not menuVisible
-    mainFrame.Visible = menuVisible
-end)
-
--- Перетаскивание Toggle-кнопки
+-- ПЕРЕТАСКИВАНИЕ TOGGLE (ТОЛЬКО ПРИ ЗАЖАТИИ НА КНОПКУ)
 local draggingToggle = false
 local dragToggleStart, toggleStartPos
 
-local function onToggleInputBegan(input)
+toggleBtn.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
         draggingToggle = true
         dragToggleStart = input.Position
         toggleStartPos = toggleBtn.Position
     end
-end
+end)
 
-local function onToggleInputChanged(input)
+toggleBtn.InputChanged:Connect(function(input)
     if draggingToggle and (input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseMovement) then
         local delta = input.Position - dragToggleStart
         toggleBtn.Position = UDim2.new(toggleStartPos.X.Scale, toggleStartPos.X.Offset + delta.X, toggleStartPos.Y.Scale, toggleStartPos.Y.Offset + delta.Y)
     end
-end
+end)
 
-local function onToggleInputEnded(input)
+toggleBtn.InputEnded:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
         draggingToggle = false
     end
-end
+end)
 
-UserInputService.InputBegan:Connect(onToggleInputBegan)
-UserInputService.InputChanged:Connect(onToggleInputChanged)
-UserInputService.InputEnded:Connect(onToggleInputEnded)
+-- Toggle открыть/закрыть (ОТДЕЛЬНО ОТ ПЕРЕТАСКИВАНИЯ)
+local menuVisible = false
+toggleBtn.MouseButton1Click:Connect(function()
+    if not draggingToggle then
+        menuVisible = not menuVisible
+        mainFrame.Visible = menuVisible
+    end
+end)
 
 -- Перетаскивание меню (только за хедер)
 local dragging = false
