@@ -1,4 +1,4 @@
--- Teratrium Hub Menu (исправленный Toggle)
+-- Teratrium Hub Menu (с Hub)
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local player = Players.LocalPlayer
@@ -9,14 +9,14 @@ screenGui.Name = "TeratriumHub"
 screenGui.Parent = player:WaitForChild("PlayerGui")
 screenGui.ResetOnSpawn = false
 
--- КОНТЕЙНЕР ДЛЯ TOGGLE (чтобы не конфликтовать с кликом)
+-- КОНТЕЙНЕР ДЛЯ TOGGLE
 local toggleContainer = Instance.new("Frame")
 toggleContainer.Size = UDim2.new(0, 60, 0, 25)
 toggleContainer.Position = UDim2.new(0.02, 0, 0.05, 0)
 toggleContainer.BackgroundTransparency = 1
 toggleContainer.Parent = screenGui
 
--- Toggle-кнопка (TextButton для клика)
+-- Toggle-кнопка
 local toggleBtn = Instance.new("TextButton")
 toggleBtn.Size = UDim2.new(1, 0, 1, 0)
 toggleBtn.Position = UDim2.new(0, 0, 0, 0)
@@ -43,7 +43,7 @@ mainFrame.ClipsDescendants = true
 mainFrame.Visible = false
 mainFrame.Parent = screenGui
 
--- ХЕДЕР
+-- ХЕДЕР (ПРОЗРАЧНЫЙ)
 local header = Instance.new("Frame")
 header.Size = UDim2.new(1, 0, 0, 30)
 header.Position = UDim2.new(0, 0, 0, 0)
@@ -52,10 +52,17 @@ header.BackgroundTransparency = 1
 header.BorderSizePixel = 0
 header.Parent = mainFrame
 
--- Название
+-- КОНТЕЙНЕР ДЛЯ НАЗВАНИЯ (чтобы разместить Teratrium и Hub в одну строку)
+local titleContainer = Instance.new("Frame")
+titleContainer.Size = UDim2.new(0, 200, 1, 0)
+titleContainer.Position = UDim2.new(0, 8, 0, 0)
+titleContainer.BackgroundTransparency = 1
+titleContainer.Parent = header
+
+-- Teratrium (белый)
 local titleLabel = Instance.new("TextLabel")
-titleLabel.Size = UDim2.new(0, 120, 1, 0)
-titleLabel.Position = UDim2.new(0, 8, 0, 0)
+titleLabel.Size = UDim2.new(0, 90, 1, 0)
+titleLabel.Position = UDim2.new(0, 0, 0, 0)
 titleLabel.BackgroundTransparency = 1
 titleLabel.Text = "Teratrium"
 titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -63,9 +70,22 @@ titleLabel.TextSize = 14
 titleLabel.Font = Enum.Font.Gotham
 titleLabel.TextXAlignment = Enum.TextXAlignment.Left
 titleLabel.TextYAlignment = Enum.TextYAlignment.Center
-titleLabel.Parent = header
+titleLabel.Parent = titleContainer
 
--- РАЗДЕЛИТЕЛЬНАЯ ПОЛОСКА
+-- Hub (РОЗОВЫЙ, такой же размер и шрифт)
+local hubLabel = Instance.new("TextLabel")
+hubLabel.Size = UDim2.new(0, 40, 1, 0)
+hubLabel.Position = UDim2.new(0, 92, 0, 0) -- Сразу после Teratrium с небольшим отступом
+hubLabel.BackgroundTransparency = 1
+hubLabel.Text = "Hub"
+hubLabel.TextColor3 = Color3.fromRGB(255, 50, 150) -- ТАКОЙ ЖЕ РОЗОВЫЙ, КАК РАЗДЕЛИТЕЛЬ
+hubLabel.TextSize = 14 -- ТАКОЙ ЖЕ РАЗМЕР
+hubLabel.Font = Enum.Font.Gotham -- ТАКОЙ ЖЕ ШРИФТ
+hubLabel.TextXAlignment = Enum.TextXAlignment.Left
+hubLabel.TextYAlignment = Enum.TextYAlignment.Center
+hubLabel.Parent = titleContainer
+
+-- РАЗДЕЛИТЕЛЬНАЯ ПОЛОСКА (РОЗОВАЯ, 1px)
 local separator = Instance.new("Frame")
 separator.Size = UDim2.new(1, 0, 0, 1)
 separator.Position = UDim2.new(0, 0, 1, 0)
@@ -74,7 +94,7 @@ separator.BackgroundTransparency = 0
 separator.BorderSizePixel = 0
 separator.Parent = header
 
--- ПЕРЕТАСКИВАНИЕ TOGGLE (через контейнер)
+-- ПЕРЕТАСКИВАНИЕ TOGGLE
 local draggingToggle = false
 local dragToggleStart, toggleStartPos
 
@@ -99,7 +119,7 @@ toggleContainer.InputEnded:Connect(function(input)
     end
 end)
 
--- Toggle открыть/закрыть (ТОЛЬКО клик по кнопке)
+-- Toggle открыть/закрыть
 local menuVisible = false
 toggleBtn.MouseButton1Click:Connect(function()
     menuVisible = not menuVisible
