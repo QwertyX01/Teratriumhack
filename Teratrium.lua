@@ -1,9 +1,47 @@
--- Teratrium Hub Menu (с иконкой в хедере)
+-- Teratrium Hub Menu (с загрузкой логотипа через writefile)
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local player = Players.LocalPlayer
 
--- GUI
+-- ============================================================
+--  ЗАГРУЗКА ЛОГОТИПА
+-- ============================================================
+local imageUrl = "https://i.ibb.co/nNMK31JC/Chat-GPT-Image-11-2026-15-15-20.png"
+local fileName = "teratrium_logo.png"
+local filePath = fileName
+
+local function fileExists(path)
+    local success, result = pcall(function() return loadfile(path) end)
+    return success and result ~= nil
+end
+
+if not fileExists(filePath) then
+    print("📥 Скачиваем логотип Teratrium...")
+    local success, content = pcall(function() return game:HttpGet(imageUrl, true) end)
+    if success and content then
+        local writeSuccess, err = pcall(function() writefile(filePath, content) end)
+        if writeSuccess then
+            print("✅ Логотип сохранён: " .. filePath)
+        else
+            warn("⚠️ Не удалось сохранить файл: " .. tostring(err))
+        end
+    else
+        warn("⚠️ Не удалось скачать картинку")
+    end
+else
+    print("✅ Логотип уже есть на диске.")
+end
+
+local logoPath = nil
+if getcustomasset then
+    logoPath = getcustomasset(filePath)
+elseif getgenv().getcustomasset then
+    logoPath = getgenv().getcustomasset(filePath)
+end
+
+-- ============================================================
+--  GUI
+-- ============================================================
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "TeratriumHub"
 screenGui.Parent = player:WaitForChild("PlayerGui")
@@ -52,20 +90,45 @@ header.BackgroundTransparency = 1
 header.BorderSizePixel = 0
 header.Parent = mainFrame
 
--- ИКОНКА (уменьшена до размеров хедера)
-local iconImage = Instance.new("ImageLabel")
-iconImage.Size = UDim2.new(0, 30, 0, 30) -- размер иконки 30x30 (под хедер 30px)
-iconImage.Position = UDim2.new(0, 4, 0, 0) -- слева с отступом 4px
-iconImage.BackgroundTransparency = 1
-iconImage.Image = "https://i.ibb.co/nNMK31JC/Chat-GPT-Image-11-2026-15-15-20.png"
-iconImage.ImageTransparency = 0
-iconImage.ScaleType = Enum.ScaleType.Fit
-iconImage.Parent = header
+-- ЛОГОТИП (ЗАГРУЖЕННЫЙ)
+if logoPath then
+    local logo = Instance.new("ImageLabel")
+    logo.Size = UDim2.new(0, 24, 0, 24) -- Под размер хедера
+    logo.Position = UDim2.new(0, 4, 0.5, -12) -- Слева, по центру
+    logo.BackgroundTransparency = 1
+    logo.Image = logoPath
+    logo.ZIndex = 15
+    logo.Parent = header
+    local lc = Instance.new("UICorner")
+    lc.CornerRadius = UDim.new(0, 4)
+    lc.Parent = logo
+else
+    -- Если логотип не загрузился — создаём заглушку "T"
+    local iconFrame = Instance.new("Frame")
+    iconFrame.Size = UDim2.new(0, 24, 0, 24)
+    iconFrame.Position = UDim2.new(0, 4, 0.5, -12)
+    iconFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 40)
+    iconFrame.BackgroundTransparency = 0
+    iconFrame.BorderSizePixel = 1
+    iconFrame.BorderColor3 = Color3.fromRGB(255, 50, 150)
+    iconFrame.Parent = header
 
--- КОНТЕЙНЕР ДЛЯ НАЗВАНИЯ (со сдвигом вправо, чтобы не перекрывать иконку)
+    local iconText = Instance.new("TextLabel")
+    iconText.Size = UDim2.new(1, 0, 1, 0)
+    iconText.Position = UDim2.new(0, 0, 0, 0)
+    iconText.BackgroundTransparency = 1
+    iconText.Text = "T"
+    iconText.TextColor3 = Color3.fromRGB(255, 50, 150)
+    iconText.TextSize = 16
+    iconText.Font = Enum.Font.GothamBold
+    iconText.TextWrapped = true
+    iconText.Parent = iconFrame
+end
+
+-- КОНТЕЙНЕР ДЛЯ НАЗВАНИЯ (со сдвигом вправо)
 local titleContainer = Instance.new("Frame")
 titleContainer.Size = UDim2.new(0, 200, 1, 0)
-titleContainer.Position = UDim2.new(0, 38, 0, 0) -- сдвиг вправо, чтобы текст не налезал на иконку
+titleContainer.Position = UDim2.new(0, 34, 0, 0)
 titleContainer.BackgroundTransparency = 1
 titleContainer.Parent = header
 
