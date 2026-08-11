@@ -1,4 +1,4 @@
--- Teratrium Hub Menu (с загрузкой логотипа через writefile)
+-- Teratrium Hub Menu (полностью черный хедер и меню)
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local player = Players.LocalPlayer
@@ -69,11 +69,11 @@ toggleBtn.Font = Enum.Font.SourceSans
 toggleBtn.TextWrapped = true
 toggleBtn.Parent = toggleContainer
 
--- ОСНОВНОЕ МЕНЮ
+-- ОСНОВНОЕ МЕНЮ (ЧЕРНОЕ)
 local mainFrame = Instance.new("Frame")
 mainFrame.Size = UDim2.new(0, 600, 0, 380)
 mainFrame.Position = UDim2.new(0.5, -300, 0.5, -190)
-mainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+mainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- ПОЛНОСТЬЮ ЧЕРНЫЙ
 mainFrame.BackgroundTransparency = 0
 mainFrame.BorderSizePixel = 1
 mainFrame.BorderColor3 = Color3.fromRGB(40, 40, 40)
@@ -81,20 +81,20 @@ mainFrame.ClipsDescendants = true
 mainFrame.Visible = false
 mainFrame.Parent = screenGui
 
--- ХЕДЕР
+-- ХЕДЕР (ЧЕРНЫЙ)
 local header = Instance.new("Frame")
 header.Size = UDim2.new(1, 0, 0, 30)
 header.Position = UDim2.new(0, 0, 0, 0)
-header.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-header.BackgroundTransparency = 1
+header.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- ПОЛНОСТЬЮ ЧЕРНЫЙ
+header.BackgroundTransparency = 0 -- УБРАЛ ПРОЗРАЧНОСТЬ
 header.BorderSizePixel = 0
 header.Parent = mainFrame
 
 -- ЛОГОТИП (ЗАГРУЖЕННЫЙ)
 if logoPath then
     local logo = Instance.new("ImageLabel")
-    logo.Size = UDim2.new(0, 24, 0, 24) -- Под размер хедера
-    logo.Position = UDim2.new(0, 4, 0.5, -12) -- Слева, по центру
+    logo.Size = UDim2.new(0, 24, 0, 24)
+    logo.Position = UDim2.new(0, 4, 0.5, -12)
     logo.BackgroundTransparency = 1
     logo.Image = logoPath
     logo.ZIndex = 15
@@ -103,7 +103,7 @@ if logoPath then
     lc.CornerRadius = UDim.new(0, 4)
     lc.Parent = logo
 else
-    -- Если логотип не загрузился — создаём заглушку "T"
+    -- Заглушка "T" если логотип не загрузился
     local iconFrame = Instance.new("Frame")
     iconFrame.Size = UDim2.new(0, 24, 0, 24)
     iconFrame.Position = UDim2.new(0, 4, 0.5, -12)
@@ -125,7 +125,7 @@ else
     iconText.Parent = iconFrame
 end
 
--- КОНТЕЙНЕР ДЛЯ НАЗВАНИЯ (со сдвигом вправо)
+-- КОНТЕЙНЕР ДЛЯ НАЗВАНИЯ
 local titleContainer = Instance.new("Frame")
 titleContainer.Size = UDim2.new(0, 200, 1, 0)
 titleContainer.Position = UDim2.new(0, 34, 0, 0)
@@ -171,7 +171,7 @@ hubLabel.TextXAlignment = Enum.TextXAlignment.Left
 hubLabel.TextYAlignment = Enum.TextYAlignment.Center
 hubLabel.Parent = titleContainer
 
--- РАЗДЕЛИТЕЛЬНАЯ ПОЛОСКА
+-- РАЗДЕЛИТЕЛЬНАЯ ПОЛОСКА (РОЗОВАЯ, 1px)
 local separator = Instance.new("Frame")
 separator.Size = UDim2.new(1, 0, 0, 1)
 separator.Position = UDim2.new(0, 0, 1, 0)
