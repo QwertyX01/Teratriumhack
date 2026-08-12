@@ -1,4 +1,4 @@
--- Teratrium Hub (ЧИСТАЯ ВЕРСИЯ - без ошибок Canvas)
+-- Teratrium Hub Menu (с локальным хедером во вкладке VIS)
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
@@ -110,7 +110,7 @@ screenGui.Name = "TeratriumHub"
 screenGui.Parent = player:WaitForChild("PlayerGui")
 screenGui.ResetOnSpawn = false
 
--- КОНТЕЙНЕР ДЛЯ TOGGLE
+-- TOGGLE КНОПКА
 local toggleContainer = Instance.new("Frame")
 toggleContainer.Size = UDim2.new(0, 60, 0, 25)
 toggleContainer.Position = UDim2.new(0.02, 0, 0.05, 0)
@@ -279,7 +279,7 @@ for i, name in ipairs(tabNames) do
         btn.Text = name
     end
     
-    -- КОНТЕНТ ВКЛАДКИ (простой Frame, без ScrollingFrame)
+    -- КОНТЕНТ ВКЛАДКИ
     local content = Instance.new("Frame")
     content.Size = UDim2.new(1, -80, 1, -55)
     content.Position = UDim2.new(0, 75, 0, 45)
@@ -294,31 +294,42 @@ for i, name in ipairs(tabNames) do
     contentCorner.CornerRadius = UDim.new(0, 4)
     contentCorner.Parent = content
     
-    -- Если вкладка VIS - добавляем элементы
+    -- ============================================================
+    --  ВКЛАДКА VIS (с локальным хедером)
+    -- ============================================================
     if name == "VIS" then
-        -- Розовый разделитель сверху
-        local topSeparator = Instance.new("Frame")
-        topSeparator.Size = UDim2.new(0.9, 0, 0, 1)
-        topSeparator.Position = UDim2.new(0.05, 0, 0.02, 0)
-        topSeparator.BackgroundColor3 = Color3.fromRGB(255, 50, 150)
-        topSeparator.BackgroundTransparency = 0
-        topSeparator.BorderSizePixel = 0
-        topSeparator.Parent = content
+        -- Локальный хедер страницы
+        local pageHeader = Instance.new("Frame")
+        pageHeader.Size = UDim2.new(1, 0, 0, 30)
+        pageHeader.Position = UDim2.new(0, 0, 0, 0)
+        pageHeader.BackgroundColor3 = Color3.fromRGB(15, 15, 20)
+        pageHeader.BackgroundTransparency = 0
+        pageHeader.BorderSizePixel = 0
+        pageHeader.Parent = content
         
-        -- Белый глаз в левом углу
+        -- Глаз в левом углу локального хедера
         local eyeIcon = Instance.new("ImageLabel")
-        eyeIcon.Size = UDim2.new(0, 28, 0, 28)
-        eyeIcon.Position = UDim2.new(0.02, 0, 0.08, 0)
+        eyeIcon.Size = UDim2.new(0, 24, 0, 24)
+        eyeIcon.Position = UDim2.new(0, 6, 0.5, -12)
         eyeIcon.BackgroundTransparency = 1
         eyeIcon.Image = "rbxassetid://6031091139"
         eyeIcon.ImageColor3 = Color3.fromRGB(255, 255, 255)
         eyeIcon.ScaleType = Enum.ScaleType.Fit
-        eyeIcon.Parent = content
+        eyeIcon.Parent = pageHeader
         
-        -- Розовый разделитель по середине
+        -- Розовый разделитель под локальным хедером
+        local headerSeparator = Instance.new("Frame")
+        headerSeparator.Size = UDim2.new(1, 0, 0, 1)
+        headerSeparator.Position = UDim2.new(0, 0, 1, 0)
+        headerSeparator.BackgroundColor3 = Color3.fromRGB(255, 50, 150)
+        headerSeparator.BackgroundTransparency = 0
+        headerSeparator.BorderSizePixel = 0
+        headerSeparator.Parent = pageHeader
+        
+        -- Розовый разделитель по середине страницы
         local midSeparator = Instance.new("Frame")
         midSeparator.Size = UDim2.new(0.9, 0, 0, 1)
-        midSeparator.Position = UDim2.new(0.05, 0, 0.3, 0)
+        midSeparator.Position = UDim2.new(0.05, 0, 0.45, 0)
         midSeparator.BackgroundColor3 = Color3.fromRGB(255, 50, 150)
         midSeparator.BackgroundTransparency = 0
         midSeparator.BorderSizePixel = 0
@@ -338,7 +349,19 @@ end
 
 animateTab(tabButtons["VIS"], true)
 
--- ПЕРЕТАСКИВАНИЕ TOGGLE
+-- ============================================================
+--  УПРАВЛЕНИЕ TOGGLE
+-- ============================================================
+local menuVisible = false
+toggleBtn.MouseButton1Click:Connect(function()
+    menuVisible = not menuVisible
+    mainFrame.Visible = menuVisible
+    print("Меню: " .. tostring(menuVisible))
+end)
+
+-- ============================================================
+--  ПЕРЕТАСКИВАНИЕ TOGGLE
+-- ============================================================
 local draggingToggle = false
 local dragToggleStart, toggleStartPos
 
@@ -363,13 +386,9 @@ toggleContainer.InputEnded:Connect(function(input)
     end
 end)
 
-local menuVisible = false
-toggleBtn.MouseButton1Click:Connect(function()
-    menuVisible = not menuVisible
-    mainFrame.Visible = menuVisible
-    print("Меню: " .. tostring(menuVisible))
-end)
-
+-- ============================================================
+--  ПЕРЕТАСКИВАНИЕ МЕНЮ
+-- ============================================================
 local dragging = false
 local dragStart, startPos
 
