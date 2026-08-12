@@ -1,4 +1,4 @@
--- Teratrium Hub Menu (только чекбоксы в ScrollingFrame)
+-- Teratrium Hub Menu (исправленный Toggle)
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
@@ -110,16 +110,12 @@ screenGui.Name = "TeratriumHub"
 screenGui.Parent = player:WaitForChild("PlayerGui")
 screenGui.ResetOnSpawn = false
 
--- КОНТЕЙНЕР ДЛЯ TOGGLE
-local toggleContainer = Instance.new("Frame")
-toggleContainer.Size = UDim2.new(0, 60, 0, 25)
-toggleContainer.Position = UDim2.new(0.02, 0, 0.05, 0)
-toggleContainer.BackgroundTransparency = 1
-toggleContainer.Parent = screenGui
-
+-- ============================================================
+--  TOGGLE КНОПКА (ПРАВИЛЬНАЯ)
+-- ============================================================
 local toggleBtn = Instance.new("TextButton")
-toggleBtn.Size = UDim2.new(1, 0, 1, 0)
-toggleBtn.Position = UDim2.new(0, 0, 0, 0)
+toggleBtn.Size = UDim2.new(0, 60, 0, 30)
+toggleBtn.Position = UDim2.new(0.02, 0, 0.05, 0)
 toggleBtn.BackgroundColor3 = Color3.fromRGB(30, 30, 40)
 toggleBtn.BackgroundTransparency = 0
 toggleBtn.BorderSizePixel = 1
@@ -129,7 +125,7 @@ toggleBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 toggleBtn.TextSize = 12
 toggleBtn.Font = Enum.Font.SourceSans
 toggleBtn.TextWrapped = true
-toggleBtn.Parent = toggleContainer
+toggleBtn.Parent = screenGui
 
 local toggleCorner = Instance.new("UICorner")
 toggleCorner.CornerRadius = UDim.new(0, 4)
@@ -279,7 +275,6 @@ for i, name in ipairs(tabNames) do
         btn.Text = name
     end
     
-    -- КОНТЕНТ ДЛЯ ВКЛАДКИ (только ScrollingFrame с чекбоксами)
     local content = Instance.new("Frame")
     content.Size = UDim2.new(1, -80, 1, -55)
     content.Position = UDim2.new(0, 75, 0, 45)
@@ -294,7 +289,6 @@ for i, name in ipairs(tabNames) do
     contentCorner.CornerRadius = UDim.new(0, 4)
     contentCorner.Parent = content
     
-    -- ScrollingFrame для чекбоксов
     local functionScrollBox = Instance.new("ScrollingFrame")
     functionScrollBox.Name = "FunctionScrollBox"
     functionScrollBox.Size = UDim2.new(1, -10, 1, -10)
@@ -314,23 +308,19 @@ for i, name in ipairs(tabNames) do
     boxCorner.CornerRadius = UDim.new(0, 4)
     boxCorner.Parent = functionScrollBox
     
-    -- UIListLayout для выравнивания
     local uiListLayout = Instance.new("UIListLayout")
     uiListLayout.Parent = functionScrollBox
     uiListLayout.SortOrder = Enum.SortOrder.LayoutOrder
     uiListLayout.Padding = UDim.new(0, 6)
     uiListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
     
-    -- Сохраняем ссылки
     tabContents[name] = {
         Frame = content,
         ScrollBox = functionScrollBox,
         Layout = uiListLayout
     }
     
-    -- ТОЛЬКО ДЛЯ VIS: добавляем чекбоксы
     if name == "VIS" then
-        -- Функция создания чекбокса
         local function createCheckbox(label)
             local row = Instance.new("Frame")
             row.Size = UDim2.new(0.9, 0, 0, 30)
@@ -377,23 +367,11 @@ for i, name in ipairs(tabNames) do
             return row
         end
         
-        -- Список чекбоксов
         local options = {
-            "ESP Players",
-            "ESP Items",
-            "ESP Traps",
-            "ESP Grenades",
-            "Show Health",
-            "Show Distance",
-            "Show Name",
-            "Show Box",
-            "Show Tracers",
-            "Show Chams",
-            "Show Glow",
-            "Show FOV",
-            "Show Crosshair",
-            "Show Radar",
-            "Show Speed"
+            "ESP Players", "ESP Items", "ESP Traps", "ESP Grenades",
+            "Show Health", "Show Distance", "Show Name", "Show Box",
+            "Show Tracers", "Show Chams", "Show Glow", "Show FOV",
+            "Show Crosshair", "Show Radar", "Show Speed"
         }
         
         for _, option in ipairs(options) do
@@ -413,38 +391,49 @@ end
 
 animateTab(tabButtons["VIS"], true)
 
--- ПЕРЕТАСКИВАНИЕ TOGGLE
-local draggingToggle = false
-local dragToggleStart, toggleStartPos
-
-toggleContainer.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
-        draggingToggle = true
-        dragToggleStart = input.Position
-        toggleStartPos = toggleContainer.Position
-    end
-end)
-
-toggleContainer.InputChanged:Connect(function(input)
-    if draggingToggle and (input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseMovement) then
-        local delta = input.Position - dragToggleStart
-        toggleContainer.Position = UDim2.new(toggleStartPos.X.Scale, toggleStartPos.X.Offset + delta.X, toggleStartPos.Y.Scale, toggleStartPos.Y.Offset + delta.Y)
-    end
-end)
-
-toggleContainer.InputEnded:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
-        draggingToggle = false
-    end
-end)
-
+-- ============================================================
+--  УПРАВЛЕНИЕ TOGGLE (ОТДЕЛЬНО ОТ ПЕРЕТАСКИВАНИЯ)
+-- ============================================================
 local menuVisible = false
+
 toggleBtn.MouseButton1Click:Connect(function()
     menuVisible = not menuVisible
     mainFrame.Visible = menuVisible
     print("Меню: " .. tostring(menuVisible))
 end)
 
+-- ============================================================
+--  ПЕРЕТАСКИВАНИЕ TOGGLE КНОПКИ
+-- ============================================================
+local draggingToggle = false
+local dragToggleStart, toggleStartPos
+
+toggleBtn.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
+        draggingToggle = true
+        dragToggleStart = input.Position
+        toggleStartPos = toggleBtn.Position
+    end
+end)
+
+toggleBtn.InputChanged:Connect(function(input)
+    if draggingToggle and (input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseMovement) then
+        local delta = input.Position - dragToggleStart
+        if delta.Magnitude > 5 then
+            toggleBtn.Position = UDim2.new(toggleStartPos.X.Scale, toggleStartPos.X.Offset + delta.X, toggleStartPos.Y.Scale, toggleStartPos.Y.Offset + delta.Y)
+        end
+    end
+end)
+
+toggleBtn.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
+        draggingToggle = false
+    end
+end)
+
+-- ============================================================
+--  ПЕРЕТАСКИВАНИЕ МЕНЮ (ТОЛЬКО ЗА ХЕДЕР)
+-- ============================================================
 local dragging = false
 local dragStart, startPos
 
