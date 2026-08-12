@@ -1,4 +1,4 @@
--- Teratrium Hub Menu (с ровными разделителями)
+-- Teratrium Hub Menu (с ровным разделителем между вкладками и страницей)
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
@@ -74,7 +74,7 @@ end
 -- ============================================================
 --  ЗАГРУЗКА ИКОНКИ ДЛЯ COM
 -- ============================================================
-local comIconUrl = "https://i.ibb.co/6zdHwRr/12872.png"
+local comIconUrl = "https://i.ibb.co/WvKshzS7/crosshair-2.jpg"
 local comIconFileName = "com_icon.jpg"
 local comIconFilePath = comIconFileName
 
@@ -221,17 +221,17 @@ headerSeparator.BorderSizePixel = 0
 headerSeparator.Parent = header
 
 -- ============================================================
---  ВКЛАДКИ И РАЗДЕЛИТЕЛЬ МЕЖДУ НИМИ И СТРАНИЦЕЙ
+--  ВКЛАДКИ
 -- ============================================================
 local tabsContainer = Instance.new("Frame")
-tabsContainer.Size = UDim2.new(0, 60, 0, 200)
+tabsContainer.Size = UDim2.new(0, 60, 0, 290)
 tabsContainer.Position = UDim2.new(0, 10, 0, 45)
 tabsContainer.BackgroundTransparency = 1
 tabsContainer.Parent = mainFrame
 
--- РОЗОВЫЙ РАЗДЕЛИТЕЛЬ МЕЖДУ ВКЛАДКАМИ И СТРАНИЦЕЙ (вертикальный)
+-- РОЗОВЫЙ РАЗДЕЛИТЕЛЬ МЕЖДУ ВКЛАДКАМИ И СТРАНИЦЕЙ (от верха до низа)
 local tabsSeparator = Instance.new("Frame")
-tabsSeparator.Size = UDim2.new(0, 1, 0, 275)
+tabsSeparator.Size = UDim2.new(0, 1, 0, 290)
 tabsSeparator.Position = UDim2.new(0, 75, 0, 45)
 tabsSeparator.BackgroundColor3 = Color3.fromRGB(255, 50, 150)
 tabsSeparator.BackgroundTransparency = 0
@@ -299,7 +299,7 @@ for i, name in ipairs(tabNames) do
     content.Parent = mainFrame
     
     -- ============================================================
-    --  ВКЛАДКА VIS (с ровным вертикальным разделителем)
+    --  ВКЛАДКА VIS (без вертикального разделителя)
     -- ============================================================
     if name == "VIS" then
         -- Локальный хедер страницы
@@ -332,22 +332,6 @@ for i, name in ipairs(tabNames) do
         headerSep.BackgroundTransparency = 0
         headerSep.BorderSizePixel = 0
         headerSep.Parent = pageHeader
-        
-        -- КОНТЕЙНЕР ДЛЯ ВЕРТИКАЛЬНОГО РАЗДЕЛИТЕЛЯ (ровно по центру, чуть приподнят)
-        local verticalContainer = Instance.new("Frame")
-        verticalContainer.Size = UDim2.new(1, 0, 1, -40)
-        verticalContainer.Position = UDim2.new(0, 0, 0, 35)
-        verticalContainer.BackgroundTransparency = 1
-        verticalContainer.Parent = content
-        
-        -- ВЕРТИКАЛЬНЫЙ РАЗДЕЛИТЕЛЬ (идеально по центру, чуть короче)
-        local verticalSeparator = Instance.new("Frame")
-        verticalSeparator.Size = UDim2.new(0, 1, 0.85, 0)
-        verticalSeparator.Position = UDim2.new(0.5, -0.5, 0.1, 0)
-        verticalSeparator.BackgroundColor3 = Color3.fromRGB(255, 50, 150)
-        verticalSeparator.BackgroundTransparency = 0
-        verticalSeparator.BorderSizePixel = 0
-        verticalSeparator.Parent = verticalContainer
     end
     
     tabContents[name] = content
