@@ -74,7 +74,7 @@ end
 -- ============================================================
 --  ЗАГРУЗКА ИКОНКИ ДЛЯ COM
 -- ============================================================
-local comIconUrl = "https://i.ibb.co/WvKshzS7/crosshair-2.jpg"
+local comIconUrl = "https://i.ibb.co/6zdHwRr/12872.png"
 local comIconFileName = "com_icon.jpg"
 local comIconFilePath = comIconFileName
 
