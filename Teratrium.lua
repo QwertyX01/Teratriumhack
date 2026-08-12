@@ -1,4 +1,4 @@
--- Teratrium Hub Menu (VIS вкладка - только глаз и разделители, без Canvas)
+-- Teratrium Hub (ЧИСТАЯ ВЕРСИЯ - без ошибок Canvas)
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
@@ -279,7 +279,7 @@ for i, name in ipairs(tabNames) do
         btn.Text = name
     end
     
-    -- КОНТЕНТ ВКЛАДКИ
+    -- КОНТЕНТ ВКЛАДКИ (простой Frame, без ScrollingFrame)
     local content = Instance.new("Frame")
     content.Size = UDim2.new(1, -80, 1, -55)
     content.Position = UDim2.new(0, 75, 0, 45)
@@ -294,52 +294,35 @@ for i, name in ipairs(tabNames) do
     contentCorner.CornerRadius = UDim.new(0, 4)
     contentCorner.Parent = content
     
-    -- ScrollingFrame (без Canvas)
-    local functionScrollBox = Instance.new("ScrollingFrame")
-    functionScrollBox.Size = UDim2.new(1, -10, 1, -10)
-    functionScrollBox.Position = UDim2.new(0, 5, 0, 5)
-    functionScrollBox.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
-    functionScrollBox.BackgroundTransparency = 0
-    functionScrollBox.BorderSizePixel = 0
-    functionScrollBox.ScrollBarThickness = 4
-    functionScrollBox.ScrollBarImageColor3 = Color3.fromRGB(255, 255, 255)
-    functionScrollBox.ScrollingDirection = Enum.ScrollingDirection.Y
-    functionScrollBox.ElasticBehavior = Enum.ElasticBehavior.Always
-    functionScrollBox.Parent = content
-    
-    local boxCorner = Instance.new("UICorner")
-    boxCorner.CornerRadius = UDim.new(0, 4)
-    boxCorner.Parent = functionScrollBox
-    
-    -- ============================================================
-    --  ТОЛЬКО ДЛЯ VIS: глаз и разделители
-    -- ============================================================
+    -- Если вкладка VIS - добавляем элементы
     if name == "VIS" then
         -- Розовый разделитель сверху
         local topSeparator = Instance.new("Frame")
         topSeparator.Size = UDim2.new(0.9, 0, 0, 1)
+        topSeparator.Position = UDim2.new(0.05, 0, 0.02, 0)
         topSeparator.BackgroundColor3 = Color3.fromRGB(255, 50, 150)
         topSeparator.BackgroundTransparency = 0
         topSeparator.BorderSizePixel = 0
-        topSeparator.Parent = functionScrollBox
+        topSeparator.Parent = content
         
         -- Белый глаз в левом углу
         local eyeIcon = Instance.new("ImageLabel")
         eyeIcon.Size = UDim2.new(0, 28, 0, 28)
-        eyeIcon.Position = UDim2.new(0.02, 0, 0, 0)
+        eyeIcon.Position = UDim2.new(0.02, 0, 0.08, 0)
         eyeIcon.BackgroundTransparency = 1
         eyeIcon.Image = "rbxassetid://6031091139"
         eyeIcon.ImageColor3 = Color3.fromRGB(255, 255, 255)
         eyeIcon.ScaleType = Enum.ScaleType.Fit
-        eyeIcon.Parent = functionScrollBox
+        eyeIcon.Parent = content
         
         -- Розовый разделитель по середине
         local midSeparator = Instance.new("Frame")
         midSeparator.Size = UDim2.new(0.9, 0, 0, 1)
+        midSeparator.Position = UDim2.new(0.05, 0, 0.3, 0)
         midSeparator.BackgroundColor3 = Color3.fromRGB(255, 50, 150)
         midSeparator.BackgroundTransparency = 0
         midSeparator.BorderSizePixel = 0
-        midSeparator.Parent = functionScrollBox
+        midSeparator.Parent = content
     end
     
     tabContents[name] = content
