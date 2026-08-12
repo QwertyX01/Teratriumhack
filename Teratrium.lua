@@ -110,9 +110,7 @@ screenGui.Name = "TeratriumHub"
 screenGui.Parent = player:WaitForChild("PlayerGui")
 screenGui.ResetOnSpawn = false
 
--- ============================================================
---  TOGGLE КНОПКА (ПРАВИЛЬНАЯ)
--- ============================================================
+-- TOGGLE КНОПКА (TextButton)
 local toggleBtn = Instance.new("TextButton")
 toggleBtn.Size = UDim2.new(0, 60, 0, 30)
 toggleBtn.Position = UDim2.new(0.02, 0, 0.05, 0)
@@ -217,7 +215,7 @@ separator.BorderSizePixel = 0
 separator.Parent = header
 
 -- ============================================================
---  ВКЛАДКИ
+--  ВКЛАДКИ (без изменений)
 -- ============================================================
 local tabsContainer = Instance.new("Frame")
 tabsContainer.Size = UDim2.new(0, 60, 0, 200)
@@ -392,7 +390,7 @@ end
 animateTab(tabButtons["VIS"], true)
 
 -- ============================================================
---  УПРАВЛЕНИЕ TOGGLE (ОТДЕЛЬНО ОТ ПЕРЕТАСКИВАНИЯ)
+--  УПРАВЛЕНИЕ TOGGLE (MouseButton1Click для TextButton!)
 -- ============================================================
 local menuVisible = false
 
@@ -403,7 +401,7 @@ toggleBtn.MouseButton1Click:Connect(function()
 end)
 
 -- ============================================================
---  ПЕРЕТАСКИВАНИЕ TOGGLE КНОПКИ
+--  ПЕРЕТАСКИВАНИЕ TOGGLE (НЕ МЕШАЕТ КЛИКУ)
 -- ============================================================
 local draggingToggle = false
 local dragToggleStart, toggleStartPos
@@ -432,7 +430,7 @@ toggleBtn.InputEnded:Connect(function(input)
 end)
 
 -- ============================================================
---  ПЕРЕТАСКИВАНИЕ МЕНЮ (ТОЛЬКО ЗА ХЕДЕР)
+--  ПЕРЕТАСКИВАНИЕ МЕНЮ
 -- ============================================================
 local dragging = false
 local dragStart, startPos
