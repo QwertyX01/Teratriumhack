@@ -1,4 +1,4 @@
--- Teratrium Hub Menu (с локальным хедером и вертикальным разделителем во вкладке VIS)
+-- Teratrium Hub Menu (с ровным вертикальным разделителем во вкладке VIS)
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
@@ -295,7 +295,7 @@ for i, name in ipairs(tabNames) do
     contentCorner.Parent = content
     
     -- ============================================================
-    --  ВКЛАДКА VIS (с локальным хедером и вертикальным разделителем)
+    --  ВКЛАДКА VIS (исправленный вертикальный разделитель)
     -- ============================================================
     if name == "VIS" then
         -- Локальный хедер страницы
@@ -329,14 +329,21 @@ for i, name in ipairs(tabNames) do
         headerSeparator.BorderSizePixel = 0
         headerSeparator.Parent = pageHeader
         
-        -- ВЕРТИКАЛЬНЫЙ РАЗДЕЛИТЕЛЬ (по середине, делит на лево/право)
+        -- КОНТЕЙНЕР ДЛЯ ВЕРТИКАЛЬНОГО РАЗДЕЛИТЕЛЯ (ровно по центру)
+        local verticalContainer = Instance.new("Frame")
+        verticalContainer.Size = UDim2.new(1, 0, 1, -35)
+        verticalContainer.Position = UDim2.new(0, 0, 0, 35)
+        verticalContainer.BackgroundTransparency = 1
+        verticalContainer.Parent = content
+        
+        -- ВЕРТИКАЛЬНЫЙ РАЗДЕЛИТЕЛЬ (теперь ровно по центру)
         local verticalSeparator = Instance.new("Frame")
-        verticalSeparator.Size = UDim2.new(0, 1, 0.75, 0)
-        verticalSeparator.Position = UDim2.new(0.5, 0, 0.08, 0)
+        verticalSeparator.Size = UDim2.new(0, 1, 1, 0)
+        verticalSeparator.Position = UDim2.new(0.5, -0.5, 0, 0)
         verticalSeparator.BackgroundColor3 = Color3.fromRGB(255, 50, 150)
         verticalSeparator.BackgroundTransparency = 0
         verticalSeparator.BorderSizePixel = 0
-        verticalSeparator.Parent = content
+        verticalSeparator.Parent = verticalContainer
     end
     
     tabContents[name] = content
