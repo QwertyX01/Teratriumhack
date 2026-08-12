@@ -1,4 +1,4 @@
--- Teratrium Hub Menu (с названием Teratrium.Hub)
+-- Teratrium Hub Menu (только чекбоксы в ScrollingFrame)
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
@@ -198,12 +198,12 @@ else
     iconText.Parent = iconFrame
 end
 
--- НАЗВАНИЕ (ПРОСТО Teratrium.Hub)
+-- НАЗВАНИЕ
 local titleLabel = Instance.new("TextLabel")
 titleLabel.Size = UDim2.new(0, 200, 1, 0)
 titleLabel.Position = UDim2.new(0, 34, 0, 0)
 titleLabel.BackgroundTransparency = 1
-titleLabel.Text = "Teratrium.Hub"  -- ПРОСТО ТЕКСТ
+titleLabel.Text = "Teratrium.Hub"
 titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 titleLabel.TextSize = 14
 titleLabel.Font = Enum.Font.Gotham
@@ -279,6 +279,7 @@ for i, name in ipairs(tabNames) do
         btn.Text = name
     end
     
+    -- КОНТЕНТ ДЛЯ ВКЛАДКИ (только ScrollingFrame с чекбоксами)
     local content = Instance.new("Frame")
     content.Size = UDim2.new(1, -80, 1, -55)
     content.Position = UDim2.new(0, 75, 0, 45)
@@ -293,24 +294,119 @@ for i, name in ipairs(tabNames) do
     contentCorner.CornerRadius = UDim.new(0, 4)
     contentCorner.Parent = content
     
-    local contentLabel = Instance.new("TextLabel")
-    contentLabel.Size = UDim2.new(1, 0, 1, 0)
-    contentLabel.BackgroundTransparency = 1
-    contentLabel.Text = name .. " TAB"
-    contentLabel.TextColor3 = Color3.fromRGB(150, 150, 150)
-    contentLabel.TextSize = 20
-    contentLabel.Font = Enum.Font.GothamBold
-    contentLabel.TextXAlignment = Enum.TextXAlignment.Center
-    contentLabel.TextYAlignment = Enum.TextYAlignment.Center
-    contentLabel.Parent = content
+    -- ScrollingFrame для чекбоксов
+    local functionScrollBox = Instance.new("ScrollingFrame")
+    functionScrollBox.Name = "FunctionScrollBox"
+    functionScrollBox.Size = UDim2.new(1, -10, 1, -10)
+    functionScrollBox.Position = UDim2.new(0, 5, 0, 5)
+    functionScrollBox.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+    functionScrollBox.BackgroundTransparency = 0
+    functionScrollBox.BorderSizePixel = 0
+    functionScrollBox.ScrollBarThickness = 3
+    functionScrollBox.ScrollBarImageColor3 = Color3.fromRGB(80, 80, 80)
+    functionScrollBox.CanvasSize = UDim2.new(0, 0, 0, 0)
+    functionScrollBox.AutomaticCanvasSize = Enum.AutomaticCanvasSize.Y
+    functionScrollBox.ScrollingDirection = Enum.ScrollingDirection.Y
+    functionScrollBox.ElasticBehavior = Enum.ElasticBehavior.Always
+    functionScrollBox.Parent = content
+    
+    local boxCorner = Instance.new("UICorner")
+    boxCorner.CornerRadius = UDim.new(0, 4)
+    boxCorner.Parent = functionScrollBox
+    
+    -- UIListLayout для выравнивания
+    local uiListLayout = Instance.new("UIListLayout")
+    uiListLayout.Parent = functionScrollBox
+    uiListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    uiListLayout.Padding = UDim.new(0, 6)
+    uiListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+    
+    -- Сохраняем ссылки
+    tabContents[name] = {
+        Frame = content,
+        ScrollBox = functionScrollBox,
+        Layout = uiListLayout
+    }
+    
+    -- ТОЛЬКО ДЛЯ VIS: добавляем чекбоксы
+    if name == "VIS" then
+        -- Функция создания чекбокса
+        local function createCheckbox(label)
+            local row = Instance.new("Frame")
+            row.Size = UDim2.new(0.9, 0, 0, 30)
+            row.BackgroundTransparency = 1
+            row.Parent = functionScrollBox
+            
+            local checkBox = Instance.new("TextButton")
+            checkBox.Size = UDim2.new(0, 20, 0, 20)
+            checkBox.Position = UDim2.new(0, 0, 0.5, -10)
+            checkBox.BackgroundColor3 = Color3.fromRGB(20, 20, 25)
+            checkBox.BackgroundTransparency = 0
+            checkBox.BorderSizePixel = 1
+            checkBox.BorderColor3 = Color3.fromRGB(150, 150, 150)
+            checkBox.Text = ""
+            checkBox.Parent = row
+            
+            local checkCorner = Instance.new("UICorner")
+            checkCorner.CornerRadius = UDim.new(0, 3)
+            checkCorner.Parent = checkBox
+            
+            local labelText = Instance.new("TextLabel")
+            labelText.Size = UDim2.new(1, -30, 1, 0)
+            labelText.Position = UDim2.new(0, 25, 0, 0)
+            labelText.BackgroundTransparency = 1
+            labelText.Text = label
+            labelText.TextColor3 = Color3.fromRGB(200, 200, 200)
+            labelText.TextSize = 13
+            labelText.Font = Enum.Font.Gotham
+            labelText.TextXAlignment = Enum.TextXAlignment.Left
+            labelText.TextYAlignment = Enum.TextYAlignment.Center
+            labelText.Parent = row
+            
+            local checked = false
+            checkBox.MouseButton1Click:Connect(function()
+                checked = not checked
+                checkBox.Text = checked and "✓" or ""
+                checkBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+                checkBox.TextSize = 14
+                checkBox.Font = Enum.Font.GothamBold
+                checkBox.BorderColor3 = checked and Color3.fromRGB(255, 50, 150) or Color3.fromRGB(150, 150, 150)
+                print(label .. ": " .. tostring(checked))
+            end)
+            
+            return row
+        end
+        
+        -- Список чекбоксов
+        local options = {
+            "ESP Players",
+            "ESP Items",
+            "ESP Traps",
+            "ESP Grenades",
+            "Show Health",
+            "Show Distance",
+            "Show Name",
+            "Show Box",
+            "Show Tracers",
+            "Show Chams",
+            "Show Glow",
+            "Show FOV",
+            "Show Crosshair",
+            "Show Radar",
+            "Show Speed"
+        }
+        
+        for _, option in ipairs(options) do
+            createCheckbox(option)
+        end
+    end
     
     tabButtons[name] = btn
-    tabContents[name] = content
     
     btn.MouseButton1Click:Connect(function()
         for n, b in pairs(tabButtons) do
             animateTab(b, n == name)
-            tabContents[n].Visible = (n == name)
+            tabContents[n].Frame.Visible = (n == name)
         end
     end)
 end
