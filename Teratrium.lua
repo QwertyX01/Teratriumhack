@@ -1,4 +1,4 @@
--- Teratrium Hub Menu (с ровным вертикальным разделителем во вкладке VIS)
+-- Teratrium Hub Menu (с ровными разделителями)
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
@@ -211,23 +211,32 @@ titleLabel.TextXAlignment = Enum.TextXAlignment.Left
 titleLabel.TextYAlignment = Enum.TextYAlignment.Center
 titleLabel.Parent = header
 
--- РАЗДЕЛИТЕЛЬНАЯ ПОЛОСКА
-local separator = Instance.new("Frame")
-separator.Size = UDim2.new(1, 0, 0, 1)
-separator.Position = UDim2.new(0, 0, 1, 0)
-separator.BackgroundColor3 = Color3.fromRGB(255, 50, 150)
-separator.BackgroundTransparency = 0
-separator.BorderSizePixel = 0
-separator.Parent = header
+-- РАЗДЕЛИТЕЛЬНАЯ ПОЛОСКА (под хедером)
+local headerSeparator = Instance.new("Frame")
+headerSeparator.Size = UDim2.new(1, 0, 0, 1)
+headerSeparator.Position = UDim2.new(0, 0, 1, 0)
+headerSeparator.BackgroundColor3 = Color3.fromRGB(255, 50, 150)
+headerSeparator.BackgroundTransparency = 0
+headerSeparator.BorderSizePixel = 0
+headerSeparator.Parent = header
 
 -- ============================================================
---  ВКЛАДКИ
+--  ВКЛАДКИ И РАЗДЕЛИТЕЛЬ МЕЖДУ НИМИ И СТРАНИЦЕЙ
 -- ============================================================
 local tabsContainer = Instance.new("Frame")
 tabsContainer.Size = UDim2.new(0, 60, 0, 200)
 tabsContainer.Position = UDim2.new(0, 10, 0, 45)
 tabsContainer.BackgroundTransparency = 1
 tabsContainer.Parent = mainFrame
+
+-- РОЗОВЫЙ РАЗДЕЛИТЕЛЬ МЕЖДУ ВКЛАДКАМИ И СТРАНИЦЕЙ (вертикальный)
+local tabsSeparator = Instance.new("Frame")
+tabsSeparator.Size = UDim2.new(0, 1, 0, 275)
+tabsSeparator.Position = UDim2.new(0, 75, 0, 45)
+tabsSeparator.BackgroundColor3 = Color3.fromRGB(255, 50, 150)
+tabsSeparator.BackgroundTransparency = 0
+tabsSeparator.BorderSizePixel = 0
+tabsSeparator.Parent = mainFrame
 
 local tabNames = {"VIS", "COM", "MISC"}
 local tabButtons = {}
@@ -281,21 +290,16 @@ for i, name in ipairs(tabNames) do
     
     -- КОНТЕНТ ВКЛАДКИ
     local content = Instance.new("Frame")
-    content.Size = UDim2.new(1, -80, 1, -55)
-    content.Position = UDim2.new(0, 75, 0, 45)
+    content.Size = UDim2.new(1, -90, 1, -55)
+    content.Position = UDim2.new(0, 85, 0, 45)
     content.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
     content.BackgroundTransparency = 0
-    content.BorderSizePixel = 1
-    content.BorderColor3 = Color3.fromRGB(30, 30, 30)
+    content.BorderSizePixel = 0
     content.Visible = (i == 1)
     content.Parent = mainFrame
     
-    local contentCorner = Instance.new("UICorner")
-    contentCorner.CornerRadius = UDim.new(0, 4)
-    contentCorner.Parent = content
-    
     -- ============================================================
-    --  ВКЛАДКА VIS (исправленный вертикальный разделитель)
+    --  ВКЛАДКА VIS (с ровным вертикальным разделителем)
     -- ============================================================
     if name == "VIS" then
         -- Локальный хедер страницы
@@ -321,25 +325,25 @@ for i, name in ipairs(tabNames) do
         eyeIcon.Parent = pageHeader
         
         -- Розовый разделитель под локальным хедером
-        local headerSeparator = Instance.new("Frame")
-        headerSeparator.Size = UDim2.new(1, 0, 0, 1)
-        headerSeparator.Position = UDim2.new(0, 0, 1, 0)
-        headerSeparator.BackgroundColor3 = Color3.fromRGB(255, 50, 150)
-        headerSeparator.BackgroundTransparency = 0
-        headerSeparator.BorderSizePixel = 0
-        headerSeparator.Parent = pageHeader
+        local headerSep = Instance.new("Frame")
+        headerSep.Size = UDim2.new(1, 0, 0, 1)
+        headerSep.Position = UDim2.new(0, 0, 1, 0)
+        headerSep.BackgroundColor3 = Color3.fromRGB(255, 50, 150)
+        headerSep.BackgroundTransparency = 0
+        headerSep.BorderSizePixel = 0
+        headerSep.Parent = pageHeader
         
-        -- КОНТЕЙНЕР ДЛЯ ВЕРТИКАЛЬНОГО РАЗДЕЛИТЕЛЯ (ровно по центру)
+        -- КОНТЕЙНЕР ДЛЯ ВЕРТИКАЛЬНОГО РАЗДЕЛИТЕЛЯ (ровно по центру, чуть приподнят)
         local verticalContainer = Instance.new("Frame")
-        verticalContainer.Size = UDim2.new(1, 0, 1, -35)
+        verticalContainer.Size = UDim2.new(1, 0, 1, -40)
         verticalContainer.Position = UDim2.new(0, 0, 0, 35)
         verticalContainer.BackgroundTransparency = 1
         verticalContainer.Parent = content
         
-        -- ВЕРТИКАЛЬНЫЙ РАЗДЕЛИТЕЛЬ (теперь ровно по центру)
+        -- ВЕРТИКАЛЬНЫЙ РАЗДЕЛИТЕЛЬ (идеально по центру, чуть короче)
         local verticalSeparator = Instance.new("Frame")
-        verticalSeparator.Size = UDim2.new(0, 1, 1, 0)
-        verticalSeparator.Position = UDim2.new(0.5, -0.5, 0, 0)
+        verticalSeparator.Size = UDim2.new(0, 1, 0.85, 0)
+        verticalSeparator.Position = UDim2.new(0.5, -0.5, 0.1, 0)
         verticalSeparator.BackgroundColor3 = Color3.fromRGB(255, 50, 150)
         verticalSeparator.BackgroundTransparency = 0
         verticalSeparator.BorderSizePixel = 0
