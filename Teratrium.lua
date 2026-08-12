@@ -1,4 +1,4 @@
--- Teratrium Hub Menu (VIS вкладка - только глаз и разделители)
+-- Teratrium Hub Menu (VIS вкладка - только глаз и разделители, без Canvas)
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
@@ -294,7 +294,7 @@ for i, name in ipairs(tabNames) do
     contentCorner.CornerRadius = UDim.new(0, 4)
     contentCorner.Parent = content
     
-    -- ScrollingFrame для VIS
+    -- ScrollingFrame (без Canvas)
     local functionScrollBox = Instance.new("ScrollingFrame")
     functionScrollBox.Size = UDim2.new(1, -10, 1, -10)
     functionScrollBox.Position = UDim2.new(0, 5, 0, 5)
@@ -302,9 +302,7 @@ for i, name in ipairs(tabNames) do
     functionScrollBox.BackgroundTransparency = 0
     functionScrollBox.BorderSizePixel = 0
     functionScrollBox.ScrollBarThickness = 4
-    functionScrollBox.ScrollBarImageColor3 = Color3.fromRGB(255, 255, 255) -- БЕЛЫЙ скроллбар
-    functionScrollBox.CanvasSize = UDim2.new(0, 0, 0, 0)
-    functionScrollBox.AutomaticCanvasSize = Enum.AutomaticCanvasSize.Y
+    functionScrollBox.ScrollBarImageColor3 = Color3.fromRGB(255, 255, 255)
     functionScrollBox.ScrollingDirection = Enum.ScrollingDirection.Y
     functionScrollBox.ElasticBehavior = Enum.ElasticBehavior.Always
     functionScrollBox.Parent = content
@@ -313,18 +311,11 @@ for i, name in ipairs(tabNames) do
     boxCorner.CornerRadius = UDim.new(0, 4)
     boxCorner.Parent = functionScrollBox
     
-    -- UIListLayout
-    local uiListLayout = Instance.new("UIListLayout")
-    uiListLayout.Parent = functionScrollBox
-    uiListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-    uiListLayout.Padding = UDim.new(0, 10)
-    uiListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
-    
     -- ============================================================
-    --  ТОЛЬКО ДЛЯ VIS: глаз и разделители (БЕЗ ФУНКЦИЙ!)
+    --  ТОЛЬКО ДЛЯ VIS: глаз и разделители
     -- ============================================================
     if name == "VIS" then
-        -- 1. РОЗОВЫЙ РАЗДЕЛИТЕЛЬ СВЕРХУ (тонкая полоска)
+        -- Розовый разделитель сверху
         local topSeparator = Instance.new("Frame")
         topSeparator.Size = UDim2.new(0.9, 0, 0, 1)
         topSeparator.BackgroundColor3 = Color3.fromRGB(255, 50, 150)
@@ -332,25 +323,23 @@ for i, name in ipairs(tabNames) do
         topSeparator.BorderSizePixel = 0
         topSeparator.Parent = functionScrollBox
         
-        -- 2. БЕЛЫЙ ГЛАЗ В ЛЕВОМ УГЛУ
+        -- Белый глаз в левом углу
         local eyeIcon = Instance.new("ImageLabel")
         eyeIcon.Size = UDim2.new(0, 28, 0, 28)
-        eyeIcon.Position = UDim2.new(0.02, 0, 0, 0) -- СЛЕВА
+        eyeIcon.Position = UDim2.new(0.02, 0, 0, 0)
         eyeIcon.BackgroundTransparency = 1
-        eyeIcon.Image = "rbxassetid://6031091139" -- Глаз
-        eyeIcon.ImageColor3 = Color3.fromRGB(255, 255, 255) -- БЕЛЫЙ
+        eyeIcon.Image = "rbxassetid://6031091139"
+        eyeIcon.ImageColor3 = Color3.fromRGB(255, 255, 255)
         eyeIcon.ScaleType = Enum.ScaleType.Fit
         eyeIcon.Parent = functionScrollBox
         
-        -- 3. РОЗОВЫЙ РАЗДЕЛИТЕЛЬ ПО СЕРЕДИНЕ (делит страницу на две части)
+        -- Розовый разделитель по середине
         local midSeparator = Instance.new("Frame")
         midSeparator.Size = UDim2.new(0.9, 0, 0, 1)
         midSeparator.BackgroundColor3 = Color3.fromRGB(255, 50, 150)
         midSeparator.BackgroundTransparency = 0
         midSeparator.BorderSizePixel = 0
         midSeparator.Parent = functionScrollBox
-        
-        -- Больше ничего нет! Никаких чекбоксов и функций!
     end
     
     tabContents[name] = content
